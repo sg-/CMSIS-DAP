@@ -19,6 +19,25 @@
 
 #include "target_flash.inc"
 
+///////////////////////////////////////////////////////////////
+// patchyyyyyyy
+
+static uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max)
+{
+    return ((test < min) || (test > max)) ? 0 : 1;
+}
+
+#include "string.h"
+extern uint32_t usb_buffer[];
+
+static uint32_t validate_nvic(void)
+{
+    uint32_t data = 0;
+    
+    memcpy(&data, usb_buffer, 4);
+    return check_range(data, 0x1FFF0000, 0x20030000); // test RAM ranges
+}
+
 uint8_t target_flash_init(uint32_t clk) {
     // Download flash programming algorithm to target and initialise.
     if (!swd_write_memory(flash.algo_start, (uint8_t *)flash.image, flash.algo_size)) {
@@ -33,6 +52,13 @@ uint8_t target_flash_init(uint32_t clk) {
 }
 
 uint8_t target_flash_erase_sector(unsigned int sector) {
+    if (sector == 0) {
+        // need to validate the NVIC table or do not erase
+        if (validate_nvic() == 0) {
+            return 0;
+        }
+    }
+    
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_sector, sector * FLASH_SECTOR_SIZE, 0, 0, 0)) {
         return 0;
     }
@@ -41,6 +67,10 @@ uint8_t target_flash_erase_sector(unsigned int sector) {
 }
 
 uint8_t target_flash_erase_chip(void) {
+    // need to validate the NVIC table or do not erase
+    if (validate_nvic() == 0) {
+        return 0;
+    }
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_chip, 0, 0, 0, 0)) {
         return 0;
     }

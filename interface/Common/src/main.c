@@ -41,6 +41,35 @@
     #define USE_USB_EJECT_INSERT
 #endif
 
+uint32_t valid_binary_present = 0;
+#include "DAP_config.h"
+
+void pre_run_config(void)
+{    
+    uint32_t i = 0;
+    puts("pre-config");
+    
+    for( ; i<0xffffff; ++i) __NOP();
+    
+    target_set_state(DEBUG);
+    
+    // read and do mass-erase
+    target_unlock_sequence();
+    
+    // verify vector table and decide what state to leave target in
+    valid_binary_present = target_validate_nvic();
+    printf("NVIC is %s\n", (valid_binary_present) ? "valid" : "invalid" );
+    
+    target_set_state(NO_DEBUG);
+    if (!valid_binary_present) {
+        // should just have to hold the target in reset
+        target_set_state(RESET_HOLD);
+    } else {
+        target_set_state(RESET_RUN);
+    }
+    //while(1);
+}
+
 // Event flags for main task
 // Timers events
 #define FLAGS_MAIN_90MS           (1 << 0)
@@ -285,11 +314,11 @@ __task void main_task(void) {
     main_task_id = os_tsk_self();
 
     // leds
-    gpio_init();
-    // Turn off LED
-    gpio_set_dap_led(1);
-    gpio_set_cdc_led(1);
-    gpio_set_msd_led(1);
+//    gpio_init();
+//    // Turn off LED
+//    gpio_set_dap_led(1);
+//    gpio_set_cdc_led(1);
+//    gpio_set_msd_led(1);
 
 #ifdef BOARD_UBLOX_C027
     PORT_SWD_SETUP();
@@ -305,7 +334,7 @@ __task void main_task(void) {
 #endif 
 
     usbd_init();
-    swd_init();
+//    swd_init();
 
     // Setup reset button
     gpio_enable_button_flag(main_task_id, FLAGS_MAIN_RESET);
@@ -330,8 +359,8 @@ __task void main_task(void) {
 #endif
 
     // start semihost task
-    semihost_init();
-    semihost_enable();
+    //semihost_init();
+    //semihost_enable();
 
     while(1) {
         os_evt_wait_or(   FLAGS_MAIN_RESET              // Put target in reset state
@@ -377,7 +406,7 @@ __task void main_task(void) {
                 send_uID = 0;
             }
             // Reset target
-            target_set_state(NO_DEBUG); //TESTING
+            target_set_state(NO_DEBUG); //TESTING for IAR
             target_set_state(RESET_RUN);
             cdc_led_state = LED_FLASH;
             gpio_set_cdc_led(1);
@@ -553,8 +582,23 @@ __task void main_task(void) {
 
 // Main Program
 int main (void) {
-  /* Allow the board to do some last initialization before the main task is started */
-  board_init();
-
-  os_sys_init_user(main_task, MAIN_TASK_PRIORITY, stk_main_task, MAIN_TASK_STACK);
+    /* Allow the board to do some last initialization before the main task is started */
+    board_init();
+    
+    // TEST target known config
+    gpio_init();
+    // Turn off LED
+    gpio_set_dap_led(0);
+    gpio_set_cdc_led(0);
+    gpio_set_msd_led(0);
+    // config swd pins
+    
+    pre_run_config();
+    
+    // Turn off LED
+    gpio_set_dap_led(1);
+    gpio_set_cdc_led(1);
+    gpio_set_msd_led(1);
+    // original task to start USB
+    os_sys_init_user(main_task, MAIN_TASK_PRIORITY, stk_main_task, MAIN_TASK_STACK);
 }

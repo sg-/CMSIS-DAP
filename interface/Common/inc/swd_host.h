@@ -25,6 +25,8 @@ uint8_t swd_read_ap(uint32_t adr, uint32_t *val);
 uint8_t swd_write_ap(uint32_t adr, uint32_t val);
 uint8_t swd_read_memory(uint32_t address, uint8_t *data, uint32_t size);
 uint8_t swd_write_memory(uint32_t address, uint8_t *data, uint32_t size);
+// TESTING
+uint8_t swd_read_word(uint32_t addr, uint32_t *val);
 void swd_set_target_reset(uint8_t asserted);
 uint8_t swd_is_semihost_event(uint32_t *r0, uint32_t *r1);
 uint8_t swd_semihost_restart(uint32_t r0);

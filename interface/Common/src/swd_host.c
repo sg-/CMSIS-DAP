@@ -340,7 +340,7 @@ static uint8_t swd_write_data(uint32_t address, uint32_t data) {
 }
 
 // Read 32-bit word from target memory.
-static uint8_t swd_read_word(uint32_t addr, uint32_t *val) {
+/*satic*/uint8_t swd_read_word(uint32_t addr, uint32_t *val) {
     if (!swd_write_ap(AP_CSW, CSW_VALUE | CSW_SIZE32)) {
         return 0;
     }
