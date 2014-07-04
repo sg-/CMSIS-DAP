@@ -517,20 +517,8 @@ static uint8_t swd_write_debug_state(DEBUG_STATE *state) {
         return 0;
     }
 
-    if (!swd_read_word(DBG_HCSR, &status)) {
-        status = status;
-    }
-    
     if (!swd_write_word(DBG_HCSR, DBGKEY | C_DEBUGEN)) {
         return 0;
-    }
-    
-    if (!swd_write_word(DBG_HCSR, DBGKEY | C_DEBUGEN | C_HALT)) {
-        return 0;
-    }
-    
-    if (!swd_read_word(DBG_HCSR, &status)) {
-        status = status;
     }
 
     // check status
@@ -699,7 +687,6 @@ uint8_t swd_semihost_restart(uint32_t r0) {
     }
 
     return 1;
-    //return state.r[0];
 }
 
 // SWD Reset
