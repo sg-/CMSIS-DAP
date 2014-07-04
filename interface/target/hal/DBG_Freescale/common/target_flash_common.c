@@ -46,9 +46,20 @@ uint8_t target_flash_init(uint32_t clk) {
 
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.init, 0, 0 /* clk value is not used */, 0, 0)) {
         return 0;
+        //return 1;
     }
 
     return 1;
+}
+
+uint8_t target_flash_uninit(void)
+{
+    uint32_t result = swd_flash_syscall_exec(&flash.sys_call_param, flash.uninit, 0, 0, 0, 0);
+    if (!result) {
+        return 0;
+    }
+
+    return 1;   
 }
 
 uint8_t target_flash_erase_sector(unsigned int sector) {

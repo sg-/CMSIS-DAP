@@ -31,6 +31,7 @@
 #include "target_reset.h"
 #include "swd_host.h"
 #include "version.h"
+#include "target_flash_common.h"
 #ifdef BOARD_UBLOX_C027
 #include <LPC11Uxx.h>
 #include "DAP_config.h"
@@ -49,9 +50,15 @@ void pre_run_config(void)
     uint32_t i = 0;
     puts("pre-config");
     
-    for( ; i<0xffffff; ++i) __NOP();
+    //for( ; i<0xffffff; ++i) __NOP();
     
-    target_set_state(DEBUG);
+    while(!target_set_state(RESET_PROGRAM)) {
+        puts("fail!");
+    }
+
+    while(!target_set_state(DEBUG)) {
+        puts("fail!");
+    }
     
     // read and do mass-erase
     target_unlock_sequence();
@@ -59,6 +66,21 @@ void pre_run_config(void)
     // verify vector table and decide what state to leave target in
     valid_binary_present = target_validate_nvic();
     printf("NVIC is %s\n", (valid_binary_present) ? "valid" : "invalid" );
+    
+    //////////////////////////////////////////////
+    // start target ID patch
+    ///////////////////////////////////////////
+    // get target ID
+    if (valid_binary_present == 1) {
+        if (target_flash_init(SystemCoreClock)) {
+            i = target_flash_uninit();
+            if (i) {
+                // here we can read the ID
+            }
+        }
+    }    
+    //////////////////////////////////////////////
+    // get out of debug - end the target ID patch
     
     target_set_state(NO_DEBUG);
     if (!valid_binary_present) {

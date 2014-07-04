@@ -121,3 +121,14 @@ uint32_t target_validate_nvic(void)
     return ret_val;
 }
 
+uint32_t get_target_uuid(uint8_t* data, uint32_t size)
+{
+    uint32_t tmp = 0;
+    uint32_t address;
+    if (swd_read_word(address, &tmp) == 1) {
+        data[0] = (uint8_t) tmp & 0xff;
+        data[1] = (uint8_t) (tmp>>8 ) & 0xff;
+        data[2] = (uint8_t) (tmp>>16) & 0xff;
+        data[3] = (uint8_t) (tmp>>24) & 0xff;
+    }
+}

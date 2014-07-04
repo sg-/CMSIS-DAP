@@ -517,8 +517,20 @@ static uint8_t swd_write_debug_state(DEBUG_STATE *state) {
         return 0;
     }
 
+    if (!swd_read_word(DBG_HCSR, &status)) {
+        status = status;
+    }
+    
     if (!swd_write_word(DBG_HCSR, DBGKEY | C_DEBUGEN)) {
         return 0;
+    }
+    
+    if (!swd_write_word(DBG_HCSR, DBGKEY | C_DEBUGEN | C_HALT)) {
+        return 0;
+    }
+    
+    if (!swd_read_word(DBG_HCSR, &status)) {
+        status = status;
     }
 
     // check status
@@ -653,7 +665,7 @@ uint8_t swd_semihost_restart(uint32_t r0) {
     return 1;
 }
 
-uint8_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4) {
+/*uint8_t*/ uint32_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4) {
     DEBUG_STATE state;
 
     // Call flash algorithm function on target and wait for result.
@@ -687,6 +699,7 @@ uint8_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry
     }
 
     return 1;
+    //return state.r[0];
 }
 
 // SWD Reset
