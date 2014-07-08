@@ -653,7 +653,7 @@ uint8_t swd_semihost_restart(uint32_t r0) {
     return 1;
 }
 
-/*uint8_t*/ uint32_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4) {
+uint8_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4) {
     DEBUG_STATE state;
 
     // Call flash algorithm function on target and wait for result.
@@ -684,6 +684,43 @@ uint8_t swd_semihost_restart(uint32_t r0) {
     // Flash functions return 0 if successful.
     if (state.r[0] != 0) {
         return 0;
+    }
+
+    return 1;
+}
+
+uint32_t swd_flash_syscall_exec_return_value(const FLASH_SYSCALL *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4) {
+    DEBUG_STATE state;
+
+    // Call flash algorithm function on target and wait for result.
+    state.xpsr     = 0x01000000;          // xPSR: T = 1, ISR = 0
+    state.r[0]     = arg1;                   // R0: Argument 1
+    state.r[1]     = arg2;                   // R1: Argument 2
+    state.r[2]     = arg3;                   // R2: Argument 3
+    state.r[3]     = arg4;                   // R3: Argument 4
+
+    state.r[9]     = sysCallParam->static_base;    // SB: Static Base
+
+    state.r[13]    = sysCallParam->stack_pointer;  // SP: Stack Pointer
+    state.r[14]    = sysCallParam->breakpoint;       // LR: Exit Point
+    state.r[15]    = entry;                           // PC: Entry Point
+
+    if (!swd_write_debug_state(&state)) {
+        return 0;
+    }
+
+    if (!swd_wait_until_halted()) {
+        return 0;
+    }
+
+    if (!swd_read_core_register(0, &state.r[0])) {
+        return 0;
+    }
+
+    // Flash functions return 0 if successful.
+    if (state.r[0] != 0) {
+        //return 0;
+        return state.r[0];
     }
 
     return 1;

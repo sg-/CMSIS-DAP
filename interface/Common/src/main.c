@@ -45,9 +45,11 @@
 uint32_t valid_binary_present = 0;
 #include "DAP_config.h"
 
+uint32_t uuid_data[4] = {0};
+
 void pre_run_config(void)
 {    
-    uint32_t i = 0;
+    int32_t i = 3, j = 0;
     puts("pre-config");
     
     //for( ; i<0xffffff; ++i) __NOP();
@@ -71,14 +73,18 @@ void pre_run_config(void)
     // start target ID patch
     ///////////////////////////////////////////
     // get target ID
-    if (valid_binary_present == 1) {
-        if (target_flash_init(SystemCoreClock)) {
-            i = target_flash_uninit();
-            if (i) {
-                // here we can read the ID
+    target_set_state(RESET_PROGRAM);
+    if (target_flash_init(SystemCoreClock)) {
+        j = target_flash_uninit();
+        if (j) {
+            // here we can read the ID
+            for(; i>=0; --i){
+                swd_read_word(j, &uuid_data[i]);
+                printf("REG:%08x\tVAL:%08x\r\n", j, uuid_data[i]);
+                j +=4;
             }
         }
-    }    
+    }
     //////////////////////////////////////////////
     // get out of debug - end the target ID patch
     

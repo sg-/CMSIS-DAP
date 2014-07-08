@@ -47,11 +47,11 @@ int Init (unsigned long adr, unsigned long clk, unsigned long fnc)
 // hacky patch to get UUID from a target
 unsigned int result[4] = {0};
 int UnInit (unsigned long fnc) {    
-    // SIM peripheral 0x4004 7000u
-    // address offset      0x1054u
+    // SIM peripheral      0x4004 7000u
+    // address offset           0x1054u
     unsigned int UUID_LOC = 0x40048054;
     unsigned int loc = 0;
-    int i = 4;
+    int i = 3;
     
     //MCG peripheral 0x4006 4000u
     // s offset              0x6
@@ -59,7 +59,7 @@ int UnInit (unsigned long fnc) {
     // make sure the IRC is running
     //while((MCG_S_LOC & 0x10) != 0);
     
-    for (; i!=0; --i) {
+    for (; i>=0; --i) {
         result[i] = *(uint32_t *)UUID_LOC;
         UUID_LOC += 4;        
     }
