@@ -62,3 +62,6 @@ tags
 *.tag
 html
 debug.txt
+
+# PyCharm project files
+.idea
