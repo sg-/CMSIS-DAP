@@ -38,11 +38,20 @@ def get_macros(dic):
 
 def get_include_paths(dic):
     paths_list = find_all_values(dic, 'include-paths')
-    return paths_list
+    paths = flatten(paths_list)
+    return paths
 
 def get_source_files(dic):
-    paths_list = find_all_values(dic, 'source-files')
-    return paths_list
+    source_list = find_all_values(dic, 'source-files')
+    source = flatten(source_list)
+    return source
+
+def flatten(list_of_list):
+    list = []
+    for ll in list_of_list:
+        for l in ll:
+            list.append(l)
+    return list
 
 def find_all_values(obj, key):
     files = []
