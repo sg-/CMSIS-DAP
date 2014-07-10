@@ -5,29 +5,7 @@ usb:
         source-paths:
             - USBStack/SRC
     source-files:
-        - shared/USBStack/INC/rl_usb.h
-        - shared/USBStack/INC/usb.h
-        - shared/USBStack/INC/usbd_cdc.h
-        - shared/USBStack/INC/usbd_cdc_acm.h
-        - shared/USBStack/INC/usbd_core.h
-        - shared/USBStack/INC/usbd_core_cdc.h
-        - shared/USBStack/INC/usbd_core_hid.h
-        - shared/USBStack/INC/usbd_core_msc.h
-        - shared/USBStack/INC/usbd_desc.h
-        - shared/USBStack/INC/usbd_event.h
-        - shared/USBStack/INC/usbd_hid.h
-        - shared/USBStack/INC/usbd_hw.h
-        - shared/USBStack/INC/usbd_lib_cdc.h
-        - shared/USBStack/INC/usbd_lib_hid.h
-        - shared/USBStack/INC/usbd_lib_msc.h
-        - shared/USBStack/INC/usbd_msc.h
-        - shared/USBStack/INC/usb_cdc.h
-        - shared/USBStack/INC/usb_def.h
-        - shared/USBStack/INC/usb_for_lib.h
-        - shared/USBStack/INC/usb_hid.h
         - shared/USBStack/INC/usb_lib.c
-        - shared/USBStack/INC/usb_lib.h
-        - shared/USBStack/INC/usb_msc.h
         - shared/USBStack/SRC\usbd_cdc_acm.c
         - shared/USBStack/SRC\usbd_core.c
         - shared/USBStack/SRC\usbd_core_cdc.c
