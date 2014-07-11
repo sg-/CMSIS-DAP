@@ -12,7 +12,7 @@ bootloader_k20:
         source-paths:
             - shared/cmsis/TARGET_Freescale/TARGET_MK20DX
             - bootloader/hal/TARGET_Freescale/TARGET_MK20DX
-    source-files:
+    source-files-c:
         - bootloader/hal/TARGET_Freescale/TARGET_MK20DX/flash_hal.c
         - bootloader/hal/TARGET_Freescale/TARGET_MK20DX/gpio.c
         - bootloader/hal/TARGET_Freescale/TARGET_MK20DX/read_uid.c
