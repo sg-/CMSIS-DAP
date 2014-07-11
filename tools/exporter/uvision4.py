@@ -14,15 +14,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from os.path import basename
+from os.path import basename, join
+from jinja2 import Template
+from export_generator import Exporter
 
 
-class Uvision4():
+class Uvision4(Exporter):
     NAME = 'uVision4'
 
-    def generate(self, cpu):
+    def __init__(self):
+        self.data = []
+
+    # interface_mcu, project_name, data
+    def generate(self, target, project_name, data):
         # target = self.target.lower()
 
         # Project file
-        self.gen_file('uvision4_%s.uvproj.tmpl' % target, ctx, '%s.uvproj' % self.program_name)
-        self.gen_file('uvision4_%s.uvopt.tmpl' % target, ctx, '%s.uvopt' % self.program_name)
+        self.gen_file('uvision4_%s.uvproj.tmpl' % target, data, '%s.uvproj' % project_name)
+        self.gen_file('uvision4_%s.uvopt.tmpl' % target, data, '%s.uvopt' % project_name)

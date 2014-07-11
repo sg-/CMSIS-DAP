@@ -1,3 +1,5 @@
+from compiler.ast import flatten
+
 def parse_yaml(dic):
     ctx = {
         'name': '' ,
@@ -37,12 +39,16 @@ def get_macros(dic):
     return _finditem(dic, 'macros')
 
 def get_include_paths(dic):
+    paths = []
     paths_list = find_all_values(dic, 'include-paths')
-    return paths_list
+    paths = flatten(paths_list)
+    return paths
 
 def get_source_files(dic):
-    paths_list = find_all_values(dic, 'source-files')
-    return paths_list
+    source = []
+    source_list = find_all_values(dic, 'source-files')
+    source = flatten(source_list)
+    return source
 
 def find_all_values(obj, key):
     files = []

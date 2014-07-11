@@ -9,3 +9,9 @@ Documentation
 Community
 ---------
 For discussing the development of the CMSIS-DAP Interface Firmware please join our [mbed-devel mailing list](https://groups.google.com/forum/?fromgroups#!forum/mbed-devel).
+
+Dependencies
+------------
+* Python 2.7
+ * pyYAML
+
