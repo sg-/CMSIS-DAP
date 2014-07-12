@@ -65,10 +65,6 @@ void pre_run_config(void)
     // read and do mass-erase
     target_unlock_sequence();
     
-    // verify vector table and decide what state to leave target in
-    valid_binary_present = target_validate_nvic();
-    printf("NVIC is %s\n", (valid_binary_present) ? "valid" : "invalid" );
-    
     //////////////////////////////////////////////
     // start target ID patch
     ///////////////////////////////////////////
@@ -86,8 +82,11 @@ void pre_run_config(void)
         }
     }
     //////////////////////////////////////////////
-    // get out of debug - end the target ID patch
+    // end the target ID patch
     
+    // verify vector table and decide what state to leave target in
+    valid_binary_present = target_validate_nvic();
+    printf("NVIC is %s\n", (valid_binary_present) ? "valid" : "invalid" );
     target_set_state(NO_DEBUG);
     if (!valid_binary_present) {
         // should just have to hold the target in reset
