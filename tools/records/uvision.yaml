@@ -1,5 +1,4 @@
 uvision:
     cc-flags:
         - --debug
-        - -e
         - -g
