@@ -44,11 +44,20 @@ static void get_byte_hex( uint8_t b, uint8_t *ch1, uint8_t *ch2 ) {
     *ch2 = nybble_chars[ b & 0x0F ];
 }
 
+//TODO
+#ifdef UUID_PATCH
+#warning "built with URL for IBM quickstart kit"
+#endif
+
 static void build_uuid_string()
 {
     int i=0, j=0, k=0;
     uint8_t b = 0;
-    
+#ifdef UUID_PATCH
+    // patch for MAC use. Make sure MSB bits are set correctly
+    uuid_data[2] |=  (0x2 << 8);
+    uuid_data[2] &= ~(0x1 << 8);
+#endif
     for (; j<32; j+=8) {    
         for (; i<4; i++) {
             b = uuid_data[k] >> (24-(i*8));
@@ -194,7 +203,11 @@ static uint8_t get_html_character(HTMLCTX *h) {
                     // Add any additional substitutions here
                     case 'U':
                         h->substitute = 1;
-                        sptr = (uint8_t *)(uuid_string);    // target UUID
+#ifdef UUID_PATCH
+                        sptr = (uint8_t *)&(uuid_string[sizeof(uuid_string)-14+1]);    // target UUID only so many bits...
+#else
+                        sptr = (uint8_t *)(uuid_string);
+#endif
                     default:
                         break;
                 }

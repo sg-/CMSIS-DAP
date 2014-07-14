@@ -30,7 +30,11 @@ const unsigned char WebSide[] = {
 "<!-- Version: " FW_BUILD " Build: " __DATE__ " " __TIME__ " Git Commit SHA: "  GIT_COMMIT_SHA " Git local mods:" GIT_LOCAL_MODS_STR"-->\r\n"
 "<html>\r\n"
 "<head>\r\n"
+#if UUID_PATCH
+"<meta http-equiv=\"refresh\" content=\"0; url=http://quickstart.internetofthings.ibmcloud.com/#/device/@U\"/>\r\n"
+#else    
 "<meta http-equiv=\"refresh\" content=\"0; url=http://mbed.org/device/?code=@A&UUID=@U\"/>\r\n"
+#endif
 "<title>mbed Website Shortcut</title>\r\n"
 "</head>\r\n"
 "<body></body>\r\n"
