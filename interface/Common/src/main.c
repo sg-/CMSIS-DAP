@@ -72,7 +72,7 @@ void pre_run_config(void)
     target_set_state(RESET_PROGRAM);
     if (target_flash_init(SystemCoreClock)) {
         j = target_flash_uninit();
-        if (j) {
+        if (j > 0x1FFF0000) {   // look for valid RAM address
             // here we can read the ID
             for(; i>=0; --i){
                 swd_read_word(j, &uuid_data[i]);
