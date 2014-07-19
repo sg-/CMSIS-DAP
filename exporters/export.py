@@ -2,7 +2,7 @@ from optparse import OptionParser
 import yaml
 import logging
 import os
-from yaml_parser import parse_yaml, get_project_files, get_mcu, get_project_name_list, parse_list_yaml
+from yaml_parser import parse_yaml, get_project_files, parse_list_yaml
 from uvision4 import Uvision4
 import sys
 from os.path import basename
@@ -10,6 +10,7 @@ from os.path import basename
 def run_generator(dic, project):
     project_list = []
     yaml_files = get_project_files(dic, project) # TODO fix list inside list
+
     for yaml_file in yaml_files:
         try:
             file = open(yaml_file)
@@ -20,16 +21,11 @@ def run_generator(dic, project):
             loaded_yaml = yaml.load(file)
             project_list.append(parse_yaml(loaded_yaml))
             file.close()
-            # config.update(loaded_yaml)
-            # print "\n" + "%s" % ctx
-            #print ctx['source_files_c']
     process_data = parse_list_yaml(project_list)
 
     exporter = Uvision4()
     #run exporter for defined bootloader project
-    # project_name = get_project_name_list(ctx)
-    # print ctx
-    exporter.generate(process_data['mcu'], process_data['name'], process_data) #fix get mcu
+    exporter.generate(process_data['mcu'], process_data['name'], process_data)
 
 def process_all_projects(dic):
     projects = []
@@ -59,6 +55,11 @@ if __name__ == '__main__':
         parser.print_help()
         options.file = 'records/projects.yaml'
         #sys.exit()
+
+    # always run from root directory
+    script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
+    os.chdir(script_dir)
+    os.chdir('../')
 
     print "Processing projects file."
     project_file = open(options.file)
