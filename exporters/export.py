@@ -11,7 +11,7 @@ from ide import export
 # proper naming in ctx, encapsulate data
 # classes
 
-def run_generator(dic, project):
+def run_generator(dic, project, ide):
     project_list = []
     yaml_files = get_project_files(dic, project) # TODO fix list inside list
     if yaml_files:
@@ -31,34 +31,35 @@ def run_generator(dic, project):
         raise RuntimeError("Project record is empty")
 
     logging.info("Generating project: %s" % project)
-    ide = get_ide(process_data)
+    #ide = get_ide(process_data)
     export(process_data, ide)
 
-def process_all_projects(dic):
+def process_all_projects(dic, ide):
     projects = []
     yaml_files = []
     for k,v in dic['projects'].items():
         projects.append(k);
 
     for project in projects:
-        run_generator(dic, project)
-
-def process_project(dic, project):
-    run_generator(dic, project)
+        run_generator(dic, project, ide)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
 
     # Parse Options
     parser = OptionParser()
-    parser.add_option("-f", "--file", help="Yaml projects file")
+    parser.add_option("-f", "--file", help="YAML projects file")
     parser.add_option("-p", "--project", help="Project to be generated")
+    parser.add_option("-i", "--ide", help="Create project files for toolchain (uvision by default)")
 
     (options, args) = parser.parse_args()
 
     if not options.file:
         parser.print_help()
         sys.exit()
+
+    if not options.ide:
+        options.ide = "uvision"
 
     # always run from the root directory
     script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -70,8 +71,8 @@ if __name__ == '__main__':
     config = yaml.load(project_file)
 
     if options.project:
-        process_project(config, options.project) # one project
+        run_generator(config, options.project, options.ide) # one project
     else:
-        process_all_projects(config) # all projects within project.yaml
+        process_all_projects(config, options.ide) # all projects within project.yaml
 
     project_file.close()
