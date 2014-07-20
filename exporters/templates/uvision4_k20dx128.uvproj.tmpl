@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>mbed FRDM-K20D5M</TargetName>
+      <TargetName>{{name}}</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -43,14 +43,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\build\</OutputDirectory>
+          <OutputDirectory>.\build\{{name}}\</OutputDirectory>
           <OutputName>{{name}}</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\build\</ListingPath>
+          <ListingPath>.\build\{{name}}\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -74,9 +74,9 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name>fromelf --bin -o build\{{name}}_K20D5M.bin build\{{name}}.axf</UserProg1Name>
-            <UserProg2Name></UserProg2Name>
+            <RunUserProg2>1</RunUserProg2>
+            <UserProg1Name>fromelf --bin -o "$L@L.bin" "#L"</UserProg1Name>
+            <UserProg2Name>fromelf --m32 -o "$L@L.s19" "#L"</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
           </AfterMake>
@@ -363,7 +363,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>{% for s in symbols %} {{s}}, {% endfor %}</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
@@ -391,20 +391,7 @@
         <Group>
           <GroupName>Source</GroupName>
           <Files>
-            {% for file in source_files_c %}
-            <File>
-              <FileName>{{file.name}}</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../{{file.path}}</FilePath>
-            </File>
-            {% endfor %}
-            {% for file in source_files_cpp %}
-            <File>
-              <FileName>{{file.name}}</FileName>
-              <FileType>8</FileType>
-              <FilePath>../../{{file.path}}</FilePath>
-            </File>
-            {% endfor %}
+            {% if source_files_s %}
             {% for file in source_files_s %}
             <File>
               <FileName>{{file.name}}</FileName>
@@ -412,6 +399,26 @@
               <FilePath>../../{{file.path}}</FilePath>
             </File>
             {% endfor %}
+            {% endif %}
+            {% if source_files_c %}
+            {% for file in source_files_c %}
+            <File>
+              <FileName>{{file.name}}</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../{{file.path}}</FilePath>
+            </File>
+            {% endfor %}
+            {% endif %}
+            {% if source_files_cpp %}
+            {% for file in source_files_cpp %}
+            <File>
+              <FileName>{{file.name}}</FileName>
+              <FileType>8</FileType>
+              <FilePath>../../{{file.path}}</FilePath>
+            </File>
+            {% endfor %}
+            {% endif %}
+            {% if source_files_obj %}
             {% for file in source_files_obj %}
             <File>
               <FileName>{{file}}</FileName>
@@ -419,6 +426,8 @@
               <FilePath>../../{{file}}</FilePath>
             </File>
             {% endfor %}
+            {% endif %}
+            {% if source_files_lib %}
             {% for file in source_files_lib %}
             <File>
               <FileName>{{file}}</FileName>
@@ -426,6 +435,7 @@
               <FilePath>../../{{file}}</FilePath>
             </File>
             {% endfor %}
+            {% endif %}
           </Files>
         </Group>
       </Groups>
