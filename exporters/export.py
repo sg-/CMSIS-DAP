@@ -53,8 +53,7 @@ if __name__ == '__main__':
 
     if not options.file:
         parser.print_help()
-        options.file = 'records/projects.yaml'
-        #sys.exit()
+        sys.exit()
 
     # always run from root directory
     script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
