@@ -31,7 +31,7 @@ const unsigned char WebSide[] = {
 "<html>\r\n"
 "<head>\r\n"
 #if UUID_PATCH
-"<meta http-equiv=\"refresh\" content=\"0; url=http://quickstart.internetofthings.ibmcloud.com/#/device/@U\"/>\r\n"
+"<meta http-equiv=\"refresh\" content=\"0; url=http://mbed.org/partnerdevice/ibmethernet/?code=@A&UUID=@U\"/>\r\n"
 #else    
 "<meta http-equiv=\"refresh\" content=\"0; url=http://mbed.org/device/?code=@A&UUID=@U\"/>\r\n"
 #endif
