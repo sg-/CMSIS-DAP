@@ -35,4 +35,7 @@ uint8_t target_flash_erase_sector(uint32_t adr);
 uint8_t target_flash_program_page(uint32_t adr, uint8_t * buf, uint32_t size);
 //@}
 
+void pre_run_config(void);
+uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max);
+
 #endif // TARGET_FLASH_COMMON_H

@@ -18,16 +18,8 @@
 #include "target_flash.h"
 
 #include "target_flash.inc"
-
-///////////////////////////////////////////////////////////////
-// patchyyyyyyy
-
-static uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max)
-{
-    return ((test < min) || (test > max)) ? 0 : 1;
-}
-
 #include "string.h"
+
 extern uint32_t usb_buffer[];
 
 static uint32_t validate_nvic(void)
@@ -152,4 +144,110 @@ uint8_t target_flash_program_page(uint32_t addr, uint8_t * buf, uint32_t size)
     return 1;
 }
 
+#include "DAP_config.h"
+#include <string.h>
+#include <stdio.h>
 
+uint32_t target_validate_nvic(void)
+{
+    uint32_t data = 0, ret_val = 0;
+    if (swd_read_word(0x0, &data) == 1) {
+        printf("SP 0x%08x\n", data);
+        ret_val = check_range(data, 0x1FFF0000, 0x20030000); // test RAM ranges
+    }
+    return ret_val;
+}
+
+uint32_t valid_binary_present = 0;
+uint32_t uuid_data[4] = {0};
+
+void pre_run_config(void)
+{    
+    int32_t i = 3, j = 0;
+    puts("pre-config");
+    
+    while(!target_set_state(RESET_PROGRAM)) {
+        puts("fail!");
+    }
+
+    while(!target_set_state(DEBUG)) {
+        puts("fail!");
+    }
+    
+    // read and do mass-erase
+    target_unlock_sequence();
+    
+    //////////////////////////////////////////////
+    // start target ID patch
+    ///////////////////////////////////////////
+    // get target ID
+//    target_set_state(RESET_PROGRAM);
+//    if (target_flash_init(SystemCoreClock)) {
+//        j = target_flash_uninit();
+//        if (j > 0x1FFF0000) {   // look for valid RAM address
+//            // here we can read the ID
+//            for(; i>=0; --i){
+//                swd_read_word(j, &uuid_data[i]);
+//                printf("REG:%08x\tVAL:%08x\r\n", j, uuid_data[i]);
+//                j +=4;
+//            }
+//        }
+//    }
+    //////////////////////////////////////////////
+    // end the target ID patch
+    
+    // verify vector table and decide what state to leave target in
+    valid_binary_present = target_validate_nvic();
+    printf("NVIC is %s\n", (valid_binary_present) ? "valid" : "invalid" );
+    target_set_state(NO_DEBUG);
+    if (!valid_binary_present) {
+        // should just have to hold the target in reset
+        target_set_state(RESET_HOLD);
+    } else {
+        target_set_state(RESET_RUN);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////
+// target known state testing
+
+#include <stdio.h>
+
+#define ITM_Port8(n)    (*((volatile unsigned char *)(0xE0000000+4*n)))
+#define ITM_Port16(n)   (*((volatile unsigned short*)(0xE0000000+4*n)))
+#define ITM_Port32(n)   (*((volatile unsigned long *)(0xE0000000+4*n)))
+#define DEMCR           (*((volatile unsigned long *)(0xE000EDFC)))
+#define TRCENA          (0x01000000)
+ 
+struct __FILE { int handle; /* Add whatever needed */ };
+FILE __stdout;
+FILE __stdin;
+
+int fputc(int ch, FILE *f) 
+{
+    if (DEMCR & TRCENA)
+    {
+        while (ITM_Port32(0) == 0);
+        ITM_Port8(0) = ch;
+    }
+    return(ch);
+}
+
+uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max)
+{
+    return ((test < min) || (test > max)) ? 0 : 1;
+}
+
+//uint32_t get_target_uuid(uint8_t* data, uint32_t size)
+//{
+//    uint32_t tmp = 0;
+//    uint32_t address;
+//    if (swd_read_word(address, &tmp) == 1) {
+//        data[0] = (uint8_t) tmp & 0xff;
+//        data[1] = (uint8_t) (tmp>>8 ) & 0xff;
+//        data[2] = (uint8_t) (tmp>>16) & 0xff;
+//        data[3] = (uint8_t) (tmp>>24) & 0xff;
+//        return 1;
+//    }
+//    return 0;
+//}

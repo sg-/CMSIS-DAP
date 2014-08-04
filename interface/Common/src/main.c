@@ -42,61 +42,6 @@
     #define USE_USB_EJECT_INSERT
 #endif
 
-uint32_t valid_binary_present = 0;
-#include "DAP_config.h"
-
-uint32_t uuid_data[4] = {0};
-
-void pre_run_config(void)
-{    
-    int32_t i = 3, j = 0;
-    puts("pre-config");
-    
-    //for( ; i<0xffffff; ++i) __NOP();
-    
-    while(!target_set_state(RESET_PROGRAM)) {
-        puts("fail!");
-    }
-
-    while(!target_set_state(DEBUG)) {
-        puts("fail!");
-    }
-    
-    // read and do mass-erase
-    target_unlock_sequence();
-    
-    //////////////////////////////////////////////
-    // start target ID patch
-    ///////////////////////////////////////////
-    // get target ID
-    target_set_state(RESET_PROGRAM);
-    if (target_flash_init(SystemCoreClock)) {
-        j = target_flash_uninit();
-        if (j > 0x1FFF0000) {   // look for valid RAM address
-            // here we can read the ID
-            for(; i>=0; --i){
-                swd_read_word(j, &uuid_data[i]);
-                printf("REG:%08x\tVAL:%08x\r\n", j, uuid_data[i]);
-                j +=4;
-            }
-        }
-    }
-    //////////////////////////////////////////////
-    // end the target ID patch
-    
-    // verify vector table and decide what state to leave target in
-    valid_binary_present = target_validate_nvic();
-    printf("NVIC is %s\n", (valid_binary_present) ? "valid" : "invalid" );
-    target_set_state(NO_DEBUG);
-    if (!valid_binary_present) {
-        // should just have to hold the target in reset
-        target_set_state(RESET_HOLD);
-    } else {
-        target_set_state(RESET_RUN);
-    }
-    //while(1);
-}
-
 // Event flags for main task
 // Timers events
 #define FLAGS_MAIN_90MS           (1 << 0)
@@ -620,7 +565,11 @@ int main (void) {
     gpio_set_msd_led(0);
     // config swd pins
     
+#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
     pre_run_config();
+#else
+#warning Not building for FRDM board
+#endif
     
     // Turn off LED
     gpio_set_dap_led(1);
