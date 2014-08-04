@@ -31,12 +31,13 @@
 #include "target_reset.h"
 #include "swd_host.h"
 #include "version.h"
-#include "target_flash_common.h"
 #ifdef BOARD_UBLOX_C027
 #include <LPC11Uxx.h>
 #include "DAP_config.h"
 #include "read_uid.h"
 #endif
+
+uint32_t uuid_data[4] = {0};
 
 #if defined(BOARD_LPC1549) || defined(BOARD_LPC11U68) || defined(BOARD_LPC4337)
     #define USE_USB_EJECT_INSERT

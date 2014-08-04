@@ -159,7 +159,7 @@ uint32_t target_validate_nvic(void)
 }
 
 uint32_t valid_binary_present = 0;
-uint32_t uuid_data[4] = {0};
+extern uint32_t uuid_data[4];
 
 void pre_run_config(void)
 {    
