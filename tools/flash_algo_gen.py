@@ -21,6 +21,7 @@ included in the CMSIS-DAP Interface Firmware source code.
 """
 from struct import unpack
 from os.path import join
+import sys
 
 from utils import run_cmd
 from settings import *
@@ -117,16 +118,17 @@ def gen_flash_algo():
         ALGO_START = 0x20000000
     print "ALGO_START = 0x%08x\n" % ALGO_START
 
-    #flash_info.printInfo()
+    flash_info.printInfo()
 
     with open(ALGO_BIN_PATH, "rb") as f, open(ALGO_TXT_PATH, mode="w+") as res:
-        # Flash Algorithm
+        # Flash Algorithm - these instructions are the ALGO_OFFSET
         res.write("""
-const uint32_t flash_algo_blob[] = {
+const uint32_t flash_algorithm_blob[] = {
     0xE00ABE00, 0x062D780D, 0x24084068, 0xD3000040, 0x1E644058, 0x1C49D1FA, 0x2A001E52, 0x4770D1F2,
     """);
 
         nb_bytes = ALGO_OFFSET
+        prg_data = ''
 
         bytes_read = f.read(1024)
         while bytes_read:
@@ -143,16 +145,36 @@ const uint32_t flash_algo_blob[] = {
         # Address of the functions within the flash algorithm
         stdout, _, _ = run_cmd([FROMELF, '-s', ALGO_ELF_PATH])
         res.write("""
-static const TARGET_FLASH flash = {
+static const TARGET_FLASH flash_algorithm_struct = {
 """)
         for line in stdout.splitlines():
             t = line.strip().split()
-            if len(t) != 8: continue
-            name, loc = t[1], t[2]
+            if len(t) < 5: continue
+            name, loc, sec = t[1], t[2], t[4]
             
             if name in ['Init', 'UnInit', 'EraseChip', 'EraseSector', 'ProgramPage']:
                 addr = ALGO_START + ALGO_OFFSET + int(loc, 16)
                 res.write("    0x%08X, // %s\n" % (addr,  name))
+
+            if name == '$d.realdata':
+                if sec == '2':
+                    prg_data = int(loc, 16)
+
+        res.write("    // breakpoint = RAM start + 1\n")
+        res.write("    // RSB : base address is address of Execution Region PrgData in map file\n")
+        res.write("    //       to access global/static data\n")
+        res.write("    // RSP : Initial stack pointer\n")
+        res.write("    {\n")
+        res.write("        0x%08X, // breakpoint instruction address\n" % (ALGO_START+1))
+        res.write("        0x%08X + 0x%X + 0x%X,  // static base register value (image start + header + static base offset)\n" % (ALGO_START, ALGO_OFFSET, prg_data))
+        res.write("        0x%08X // initial stack pointer\n" % (ALGO_START+4096))
+        res.write("    },\n\n")
+        res.write("    0x%08X, // flash_buffer, any valid RAM location with > 512 bytes of working room and proper alignment\n" % (ALGO_START+4096+256))
+        res.write("    0x%08X, // algo_start, start of RAM\n" % ALGO_START)
+        res.write("    sizeof(flash_algorithm_blob), // algo_size, size of array above\n")
+        res.write("    flash_algorithm, // image, flash algo instruction array\n")
+        res.write("    512              // ram_to_flash_bytes_to_be_written\n")
+        res.write("};\n\n")
 
 
 if __name__ == '__main__':
