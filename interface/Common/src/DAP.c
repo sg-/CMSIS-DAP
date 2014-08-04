@@ -206,6 +206,7 @@ static uint32_t DAP_HostStatus(uint8_t *request, uint8_t *response) {
 //   request:  pointer to request data
 //   response: pointer to response data
 //   return:   number of bytes in response
+#include "swd_host.h"
 static uint32_t DAP_Connect(uint8_t *request, uint8_t *response) {
   uint32_t port;
 
@@ -221,7 +222,7 @@ static uint32_t DAP_Connect(uint8_t *request, uint8_t *response) {
 #if (DAP_SWD != 0)
     case DAP_PORT_SWD:
       DAP_Data.debug_port = DAP_PORT_SWD;
-      PORT_SWD_SETUP();
+      //PORT_SWD_SETUP();
       break;
 #endif
 #if (DAP_JTAG != 0)
@@ -234,7 +235,10 @@ static uint32_t DAP_Connect(uint8_t *request, uint8_t *response) {
       *response = DAP_PORT_DISABLED;
       return (1);
   }
-
+  
+  swd_set_target_state(RESET_PROGRAM);
+  //swd_set_target_state(DEBUG);
+  
   *response = port;
   return (1);
 }
@@ -247,7 +251,7 @@ static uint32_t DAP_Connect(uint8_t *request, uint8_t *response) {
 static uint32_t DAP_Disconnect(uint8_t *response) {
 
   DAP_Data.debug_port = DAP_PORT_DISABLED;
-  PORT_OFF();
+  //PORT_OFF();
 
   semihost_enable();
 

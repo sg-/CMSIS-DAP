@@ -29,7 +29,7 @@ uint8_t check_security_bits(uint32_t flashAddr, uint8_t *data);
 //! @name Flash programming operations
 //@{
 uint8_t target_flash_init(uint32_t clk);
-uint8_t target_flash_uninit(void);
+uint32_t target_flash_uninit(void);
 uint8_t target_flash_erase_chip(void);
 uint8_t target_flash_erase_sector(uint32_t adr);
 uint8_t target_flash_program_page(uint32_t adr, uint8_t * buf, uint32_t size);
