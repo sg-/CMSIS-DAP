@@ -553,6 +553,10 @@ __task void main_task(void) {
     }
 }
 
+#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+extern void pre_run_config(void);
+#endif
+
 // Main Program
 int main (void) {
     /* Allow the board to do some last initialization before the main task is started */
@@ -565,6 +569,7 @@ int main (void) {
     gpio_set_cdc_led(0);
     gpio_set_msd_led(0);
     // config swd pins
+    swd_init();
     
 #if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
     pre_run_config();

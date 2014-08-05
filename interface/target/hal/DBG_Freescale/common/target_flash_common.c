@@ -163,7 +163,7 @@ extern uint32_t uuid_data[4];
 
 void pre_run_config(void)
 {    
-    int32_t i = 3, j = 0;
+    //int32_t i = 3, j = 0;
     puts("pre-config");
     
     while(!target_set_state(RESET_PROGRAM)) {

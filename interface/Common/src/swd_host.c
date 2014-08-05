@@ -801,8 +801,7 @@ static uint8_t swd_init_debug(void) {
     dap_state.select = 0xffffffff;
     dap_state.csw = 0xffffffff;
 
-    DAP_Setup();
-    PORT_SWD_SETUP();
+    swd_init();
 
     // call a target dependant function
     // this function can do several stuff before really
@@ -976,8 +975,7 @@ uint8_t swd_set_target_state(TARGET_RESET_STATE state) {
             break;
 
         case DEBUG:
-            DAP_Setup();
-            PORT_SWD_SETUP();
+            swd_init();
 
             if (!JTAG2SWD()) {
                 return 0;

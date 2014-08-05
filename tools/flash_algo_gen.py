@@ -141,9 +141,12 @@ const uint32_t flash_algorithm_blob[] = {
             bytes_read = f.read(1024)
         
         res.write("\n};\n")
-        
+                
         # Address of the functions within the flash algorithm
         stdout, _, _ = run_cmd([FROMELF, '-s', ALGO_ELF_PATH])
+        # run a diagnostic if prompted to
+        if sys.argv[1] == '-v':
+            print stdout
         res.write("""
 static const TARGET_FLASH flash_algorithm_struct = {
 """)
