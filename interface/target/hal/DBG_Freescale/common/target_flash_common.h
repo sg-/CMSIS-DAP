@@ -38,6 +38,6 @@ uint8_t target_flash_program_page(uint32_t adr, uint8_t * buf, uint32_t size);
 uint8_t target_set_state(TARGET_RESET_STATE state);
 uint8_t target_unlock_sequence(void);
 
-uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max);
+//uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max);
 
 #endif // TARGET_FLASH_COMMON_H

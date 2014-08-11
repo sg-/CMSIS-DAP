@@ -283,18 +283,18 @@ __task void main_task(void) {
 
     // string containing unique ID
     uint8_t * id_str;
+    
+#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+#warning Building for FRDM board.
+    pre_run_config();
+#else
+#endif
 
     // Initialize our serial mailbox
     os_mbx_init(&serial_mailbox, sizeof(serial_mailbox));
 
     // Get a reference to this task
     main_task_id = os_tsk_self();
-    
-#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
-    pre_run_config();
-#else
-#warning Not building for FRDM board
-#endif
 
     // leds
 //    gpio_init();

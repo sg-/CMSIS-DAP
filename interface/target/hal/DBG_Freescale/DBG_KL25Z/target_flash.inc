@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+#define TGT_START_RAM       0x1FFFF000
+#define TGT_END_RAM         0x20003000
+
+#define TGT_START_FLASH     0x0
+#define TGT_END_FLASH       0x20000
+
 const uint32_t KL25Z_FLM[] = {
     0xE00ABE00, 0x062D780D, 0x24084068, 0xD3000040, 0x1E644058, 0x1C49D1FA, 0x2A001E52, 0x4770D1F2,
     0x4604b570, 0x4616460d, 0x49372000, 0x48376008, 0xf0004448, 0x2800f8b3, 0x2001d001, 0x2000bd70, 

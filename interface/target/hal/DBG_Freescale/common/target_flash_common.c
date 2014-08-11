@@ -22,12 +22,86 @@
 
 extern uint32_t usb_buffer[];
 
-static uint32_t validate_nvic(void)
+static uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max)
 {
-    uint32_t data = 0;
-    
-    memcpy(&data, usb_buffer, 4);
-    return check_range(data, 0x1FFF0000, 0x20030000); // test RAM ranges
+    return ((test < min) || (test > max)) ? 0 : 1;
+}
+
+static uint32_t check_value(const uint32_t test, const uint32_t val)
+{
+    return (test == val) ? 1 : 0;
+}
+
+// only testing 
+static uint32_t validate_bin_nvic(void)
+{
+    uint32_t i = 0;
+    uint32_t mem;
+    uint32_t test_val = 0;
+    // Initial_SP
+    for( ; i<(1*4); i+=4)
+    {	
+        mem = (uint32_t)usb_buffer[i];
+        // check for a valid ram address.
+        if (0 == check_range(mem, TGT_START_RAM, TGT_END_RAM)) {
+            return 0;
+        }
+    }
+    // Reset_Handler
+    // NMI_Handler
+    // HardFault_Handler
+    // MemManage_Handler (Reserved on CM0+)
+    // BusFault_Handler (Reserved on CM0+)
+    // UsageFault_Handler (Reserved on CM0+)
+    for( ; i<(4*4); i+=4)
+    {	
+        mem = (uint32_t)usb_buffer[i/4];
+        // check for a valid flash address.
+        if (0 == check_range(mem, TGT_START_FLASH, TGT_END_FLASH)) {
+            return 0;
+        }
+    }
+    i += 12;    // only testing M0 entries
+    // RESERVED * 4
+    for( ; i<(11*4); i+=4)
+    {
+        mem = (uint32_t)usb_buffer[i/4];
+        // check for a known value.
+        if (0 == check_value(mem, 0)) {
+            return 0;
+        }
+    }
+    // SVC_Handler
+    // DebugMon_Handler (Reserved on CM0+)
+    for( ; i<(12*4); i+=4)
+    {	
+        mem = (uint32_t)usb_buffer[i/4];    
+        // check for a valid flash address.
+        if (0 == check_range(mem, TGT_START_FLASH, TGT_END_FLASH)) {
+            return 0;
+        }
+    }
+    i += 4;    // only testing M0 entries
+    // RESERVED * 1
+    for( ; i<(14*4); i+=4)
+    {
+        mem = (uint32_t)usb_buffer[i/4];
+        // check for a known value
+        if (0 == check_value(mem, 0)) {
+            return 0;
+        }
+    }
+    // PendSV_Handler
+    // SysTick_Handler
+    for( ; i<(16*4); i+=4)
+    {	
+        mem = (uint32_t)usb_buffer[i/4];   
+        // check for a valid flash address.
+        if (0 == check_range(mem, TGT_START_FLASH, TGT_END_FLASH)) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 uint8_t target_flash_init(uint32_t clk) {
@@ -52,7 +126,7 @@ uint32_t target_flash_uninit(void)
 uint8_t target_flash_erase_sector(unsigned int sector) {
     if (sector == 0) {
         // need to validate the NVIC table or do not erase
-        if (validate_nvic() == 0) {
+        if (validate_bin_nvic() == 0) {
             return 0;
         }
     }
@@ -66,7 +140,7 @@ uint8_t target_flash_erase_sector(unsigned int sector) {
 
 uint8_t target_flash_erase_chip(void) {
     // need to validate the NVIC table or do not erase
-    if (validate_nvic() == 0) {
+    if (validate_bin_nvic() == 0) {
         return 0;
     }
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_chip, 0, 0, 0, 0)) {
@@ -148,14 +222,79 @@ uint8_t target_flash_program_page(uint32_t addr, uint8_t * buf, uint32_t size)
 #include <string.h>
 #include <stdio.h>
 
-uint32_t target_validate_nvic(void)
+uint32_t target_validate_nvic(uint32_t address)
 {
-    uint32_t data = 0, ret_val = 0;
-    if (swd_read_word(0x0, &data) == 1) {
-        printf("SP 0x%08x\n", data);
-        ret_val = check_range(data, 0x1FFF0000, 0x20030000); // test RAM ranges
+    uint32_t i = 0;
+    uint32_t mem[1];
+    uint32_t test_val = 0;
+    // Initial_SP
+    for( ; i<(1*4); i+=4)
+    {	
+        swd_read_word(address+i, mem);
+        test_val = mem[0];
+        // check for a valid ram address.
+        if (0 == check_range(test_val, TGT_START_RAM, TGT_END_RAM)) {
+            return 0;
+        }
     }
-    return ret_val;
+    // Reset_Handler
+    // NMI_Handler
+    // HardFault_Handler
+    // MemManage_Handler (Reserved on CM0+)
+    // BusFault_Handler (Reserved on CM0+)
+    // UsageFault_Handler (Reserved on CM0+)
+    for( ; i<(7*4); i+=4)
+    {	
+        swd_read_word(address+i, mem);
+        test_val = mem[0];    
+        // check for a valid flash address.
+        if (0 == check_range(test_val, TGT_START_FLASH, TGT_END_FLASH)) {
+            return 0;
+        }
+    }
+    // RESERVED * 4
+    for( ; i<(11*4); i+=4)
+    {
+        swd_read_word(address+i, mem);
+        test_val = mem[0];    
+        // check for a known value.
+        if (0 == check_value(test_val, 0)) {
+            return 0;
+        }
+    }
+    // SVC_Handler
+    // DebugMon_Handler (Reserved on CM0+)
+    for( ; i<(13*4); i+=4)
+    {	
+        swd_read_word(address+i, mem);
+        test_val = mem[0];    
+        // check for a valid flash address.
+        if (0 == check_range(test_val, TGT_START_FLASH, TGT_END_FLASH)) {
+            return 0;
+        }
+    }
+    // RESERVED * 1
+    for( ; i<(14*4); i+=4)
+    {
+        swd_read_word(address+i, mem);
+        test_val = mem[0];    
+        // check for a known value
+        if (0 == check_value(test_val, 0)) {
+            return 0;
+        }
+    }
+    // PendSV_Handler
+    // SysTick_Handler
+    for( ; i<(16*4); i+=4)
+    {	
+        swd_read_word(address+i, mem);
+        test_val = mem[0];    
+        // check for a valid flash address.
+        if (0 == check_range(test_val, TGT_START_FLASH, TGT_END_FLASH)) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 uint32_t valid_binary_present = 0;
@@ -197,7 +336,7 @@ void pre_run_config(void)
     // end the target ID patch
     
     // verify vector table and decide what state to leave target in
-    valid_binary_present = target_validate_nvic();
+    valid_binary_present = target_validate_nvic(0x0);
     printf("NVIC is %s\n", (valid_binary_present) ? "valid" : "invalid" );
     target_set_state(NO_DEBUG);
     if (!valid_binary_present) {
@@ -231,11 +370,6 @@ int fputc(int ch, FILE *f)
         ITM_Port8(0) = ch;
     }
     return(ch);
-}
-
-uint32_t check_range(const uint32_t test, const uint32_t min, const uint32_t max)
-{
-    return ((test < min) || (test > max)) ? 0 : 1;
 }
 
 //uint32_t get_target_uuid(uint8_t* data, uint32_t size)
