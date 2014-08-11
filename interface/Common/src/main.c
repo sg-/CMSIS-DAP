@@ -258,6 +258,10 @@ __task void serial_process() {
     }
 }
 
+#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+extern void pre_run_config(void);
+#endif
+
 extern __task void hid_process(void);
 __task void main_task(void) {
     // State processing
@@ -285,6 +289,12 @@ __task void main_task(void) {
 
     // Get a reference to this task
     main_task_id = os_tsk_self();
+    
+#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+    pre_run_config();
+#else
+#warning Not building for FRDM board
+#endif
 
     // leds
 //    gpio_init();
@@ -553,12 +563,9 @@ __task void main_task(void) {
     }
 }
 
-#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
-extern void pre_run_config(void);
-#endif
-
 // Main Program
-int main (void) {
+int main (void) 
+{
     /* Allow the board to do some last initialization before the main task is started */
     board_init();
     
@@ -571,11 +578,11 @@ int main (void) {
     // config swd pins
     swd_init();
     
-#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
-    pre_run_config();
-#else
-#warning Not building for FRDM board
-#endif
+//#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+//    pre_run_config();
+//#else
+//#warning Not building for FRDM board
+//#endif
     
     // Turn off LED
     gpio_set_dap_led(1);
