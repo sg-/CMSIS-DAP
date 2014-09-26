@@ -61,7 +61,7 @@ tags
 
 # Doxygen tags and html output
 *.tag
-html
+*.html
 debug.txt
 
 # PyCharm project files

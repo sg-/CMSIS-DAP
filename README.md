@@ -1,33 +1,65 @@
-CMSIS-DAP Refactoring Efforts
-============================
-**Goals are:**
+# dapLINK
+Tired of digging in a drawer looking for a JTAG probe only to find your board had the wrong connector? You're in luck.
+dapLINK is an embedded firmware project that enhances developer productivity. Every modern development board should 
+have a circuit that runs the dapLINK firmware. The firmware runs on many reference circuits including the ARMmbed HDK 
+and Freescale OpenSDA.
 
-- merge in mbed build system tools
-- automate testing for validating port contributions and patches
-- use mbed exporters for creating project files to debug when needed
-- share common source USB, RTOS, IO, etc. 
-- Add hooks where custom handlers are needed but generally not break buids when adding new targets and features
+**Sounds too good to be true? Keep reading.**
 
-Current Status
--------------
-**Nothing on this branch is guaranteed to work. Current efforts are with the bootloader and then the interface project**
+The dapLINK application is a USB composite device compatible with Windows, Mac and Linux that exposes three USB classes:
+- CDC: virtual serial port connection for re-targeting stdio
+- HID: a CMSIS-DAP SWD/JTAG tunnel between the PC and your MCU
+- MSC: drag-n-drop flash programming via SWD/JTAG
 
-[List of progress](https://docs.google.com/spreadsheets/d/1zZUFL7tFEOW9WSvjQx4NOZjAowWSAgiHxeV6c4Dt2kw/edit#gid=0) - not all work is incorporated on this branch yet
+dapLINK is an open-source (Apache 2.0) project that is actively being developed by ARM, it's partners and the developer 
+community. Contributions are always welcome.
 
-Bootloader:
 
-* K20DX128: working / work in progress
+# Getting Started
+Here are some of the known [development boards capable of running the dapLINK application]
+(https://developer.mbed.org/platforms/?interface=8)
+If your development board isn't listed there may be getting started notes elsewhere.
 
-Interface:
+###  Using dapLINK
+When connecting your dapLINK powered development board to a computer the *.htm file found on the drive should notify 
+you if an update is available when clicked (internet connection required). Otherwise, all [firmware and releases 
+notes are found here](https://github.com/ARMmbed)
 
-* Not working. Changes to the directory structure and hooks broke these
+### Building dapLINK
+**Step 1.** Install dependencies
+ 1. Install Python 2.7.x
+ 2. Install [pyYAML](https://github.com/yaml/pyyaml)
+ 3. Install [Setuptools](https://pypi.python.org/pypi/distribute)
+ 4. Install [Jinja2](https://pypi.python.org/pypi/Jinja2)
 
-ToDo
-------
+**Step 2.** Create the project files using [project_generator](https://github.com/0xc0170/project_generator). All 
+commands are ran from the **tools** directory
+```
+ tools>python project_generator/export.py -f records/projects.yaml
+```
+
+**Step 3.** Build all projects that were generated
+```
+ tools>python build.py
+```
+
+### adding dapLINK
+Adding dapLINK to a new (and sometimes existing) development board should be quite easy. For more information see the 
+[dapLINK porting guide](https://github.com/ARMmbed)
+
+## Contact
+For discussing the development of the CMSIS-DAP Interface Firmware please join our [mbed-devel mailing list]
+(https://groups.google.com/forum/?fromgroups#!forum/mbed-devel).
+[Porting the FW to new boards](http://mbed.org/handbook/cmsis-dap-interface-firmware)
+
+
+## Notes
+
+**Some things left to sort out**
 
 * mbed_ser driver installer to not require hardware be connected
 * Change USB to expose HID without needing the CDC driver
-* Implement XON/XOFF flowcontrol
+* Implement XON/XOFF flow control
 * Incorporate mbed build system
 * Automate basic cross OS tests
 * Change application offset address to 0x8000 for all targets with a bootloader
@@ -36,13 +68,12 @@ ToDo
 * Verify semi-hosting on HID connection
 * RAM allocation for virtual file-system hidden files and folders
 * version.txt file for offline, non html-access to the bootloader and CMSIS-DAP version
-* Add hex file support (interface only I think). Exists on master but needs verification and testing
-* Add srec file support (interface only I think)
+* Add hex file support. Exists on master but needs verification and testing
+* Add srec file support
 * etc...
 
-Tests
-------
-**A baseline for testing the dap firmware should cover:**
+**Tests**
+A baseline for testing the dap firmware should cover:
 
 1. program hello world echo application onto target MCU
  * copy using cmd line method
@@ -55,82 +86,37 @@ Note: Test should be completed when echo is received so CDC support is inclusive
 
 Note: To automate bootloader testing it may be worth putting a sequence in the dap firmware to execute the bootloader (ie: erase vector table at offset and reset)
 
-Directory
---------
-
+**Directory**
 * **bootloader** - source files that are only used by the bootloader
 * **dap**- source files that are only used by the CMSIS-DAP application
-* **flash** - Source files to build position independant flash algorithms. [Adding new flash algorithms](http://keil.com/support/man/docs/ulink2/ulink2_su_newalgorithms.htm)
+* **flash** - Source files to build position independent flash algorithms. [Adding new flash algorithms](http://keil.com/support/man/docs/ulink2/ulink2_su_newalgorithms.htm)
 * **shared** - A software component that is used by __both__ bootloader and interface
 * **tools** - python files for building and testing the projects as well as exporting project files for debugging
 
-<pre>
+```
 +---source
     +---bootloader
-        +---shared
         +---hal
-            +---freescale
-            +---nxp
-    +---openlink
-        +---shared
+            +---mcu
+    +---daplink
         +---hal
-            +---freescale
-            +---nxp
+            +---mcu
     +---common
         +---cmsis_core
             +---freescale
             +---nxp
         +---cmsis_dap
-            +---shared
             +---hal
-                +---freescale
-                +---nxp
+                +---mcu
         +---flash_algorithms
-            +---shared
             +---hal
-                +---freescale
-                +---nxp
+                +---mcu
         +---shared
-            +---freescale
-            +---nxp
+            +---mcu
         +---rtos
         +---usb
 +---tools
-    +---build
-    +---exporters
+    +---project_generator
+    +---records
     +---test
-</pre>
-
-<!---
-
-**Contribution is welcomed on this branch**
-
-Documentation
--------------
-* [Porting the FW to new boards](http://mbed.org/handbook/cmsis-dap-interface-firmware)
-
-Community
----------
-For discussing the development of the CMSIS-DAP Interface Firmware please join our [mbed-devel mailing list](https://groups.google.com/forum/?fromgroups#!forum/mbed-devel).
--->
-
-Dependencies for tools and exporters
-----------------------
-* Python 2.7
- * [pyYAML](https://github.com/yaml/pyyaml)
- * [Setuptools](https://pypi.python.org/pypi/distribute)
- * [Jinja2](https://pypi.python.org/pypi/Jinja2)
- 
-Getting Started
------
-**All scripts should be run from the projects tools directory**
-
-Step 1 - Create project files from yaml descriptions
-<pre>
-tools>python project_generator/export.py -f records/projects.yaml
-</pre>
-
-Step 2 - Build all projects that were generated
-<pre>
-tools>python build.py
-</pre>
+```
