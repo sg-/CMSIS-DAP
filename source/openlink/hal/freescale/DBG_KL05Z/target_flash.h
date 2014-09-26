@@ -28,7 +28,7 @@ static uint8_t target_flash_init(uint32_t clk);
 static uint8_t target_flash_uninit(void);
 static uint8_t target_flash_erase_chip(void);
 static uint8_t target_flash_erase_sector(uint32_t adr);
-static uint8_t target_flash_program_page(uint32_t adr, uint8_t * buf, uint32_t size);
+static uint8_t target_flash_program_page(uint32_t adr, uint8_t *buf, uint32_t size);
 
 
 static const uint32_t KL05Z_FLM[] = {
@@ -101,7 +101,8 @@ static const TARGET_FLASH flash = {
 };
 
 
-static uint8_t target_flash_init(uint32_t clk) {
+static uint8_t target_flash_init(uint32_t clk)
+{
     // Download flash programming algorithm to target and initialise.
     if (!swd_write_memory(flash.algo_start, (uint8_t *)flash.image, flash.algo_size)) {
         return 0;
@@ -114,7 +115,8 @@ static uint8_t target_flash_init(uint32_t clk) {
     return 1;
 }
 
-static uint8_t target_flash_erase_sector(unsigned int sector) {
+static uint8_t target_flash_erase_sector(unsigned int sector)
+{
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_sector, sector * 0x400, 0, 0, 0)) {
         return 0;
     }
@@ -122,7 +124,8 @@ static uint8_t target_flash_erase_sector(unsigned int sector) {
     return 1;
 }
 
-static uint8_t target_flash_erase_chip(void) {
+static uint8_t target_flash_erase_chip(void)
+{
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_chip, 0, 0, 0, 0)) {
         return 0;
     }
@@ -130,8 +133,10 @@ static uint8_t target_flash_erase_chip(void) {
     return 1;
 }
 
-static uint8_t check_security_bits(uint32_t flashAddr, uint8_t *data) {
+static uint8_t check_security_bits(uint32_t flashAddr, uint8_t *data)
+{
     uint16_t i = 0;
+
     // check to not write the security bit!!!!
     if (flashAddr == 0x400) {
         for (i = 0; i < 12; i++) {
@@ -139,13 +144,16 @@ static uint8_t check_security_bits(uint32_t flashAddr, uint8_t *data) {
                 return 0;
             }
         }
-        if ((data[14] != 0xff) || (data[15] != 0xff))
+
+        if ((data[14] != 0xff) || (data[15] != 0xff)) {
             return 0;
+        }
     }
+
     return 1;
 }
 
-static uint8_t target_flash_program_page(uint32_t addr, uint8_t * buf, uint32_t size)
+static uint8_t target_flash_program_page(uint32_t addr, uint8_t *buf, uint32_t size)
 {
     uint32_t bytes_written = 0;
 

@@ -20,6 +20,6 @@
 //#include "target_flash.h"
 
 #define FLASH_SECTOR_SIZE   (1024)
-uint32_t usb_buffer[FLASH_SECTOR_SIZE/4];
+uint32_t usb_buffer[FLASH_SECTOR_SIZE / 4];
 
 #endif

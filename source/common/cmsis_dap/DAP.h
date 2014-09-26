@@ -150,31 +150,31 @@
 
 // DAP Data structure
 typedef struct {
-  uint8_t     debug_port;                       // Debug Port
-  uint8_t     fast_clock;                       // Fast Clock Flag
-  uint32_t   clock_delay;                       // Clock Delay
-  struct {                                      // Transfer Configuration
-    uint8_t   idle_cycles;                      // Idle cycles after transfer
-    uint16_t  retry_count;                      // Number of retries after WAIT response
-    uint16_t  match_retry;                      // Number of retries if read value does not match
-    uint32_t  match_mask;                       // Match Mask
-  } transfer;
+    uint8_t     debug_port;                       // Debug Port
+    uint8_t     fast_clock;                       // Fast Clock Flag
+    uint32_t   clock_delay;                       // Clock Delay
+    struct {                                      // Transfer Configuration
+        uint8_t   idle_cycles;                      // Idle cycles after transfer
+        uint16_t  retry_count;                      // Number of retries after WAIT response
+        uint16_t  match_retry;                      // Number of retries if read value does not match
+        uint32_t  match_mask;                       // Match Mask
+    } transfer;
 #if (DAP_SWD != 0)
-  struct {                                      // SWD Configuration
-    uint8_t    turnaround;                      // Turnaround period
-    uint8_t    data_phase;                      // Always generate Data Phase
-  } swd_conf;
+    struct {                                      // SWD Configuration
+        uint8_t    turnaround;                      // Turnaround period
+        uint8_t    data_phase;                      // Always generate Data Phase
+    } swd_conf;
 #endif
 #if (DAP_JTAG != 0)
-  struct {                                      // JTAG Device Chain
-    uint8_t   count;                            // Number of devices
-    uint8_t   index;                            // Device index (device at TDO has index 0)
+    struct {                                      // JTAG Device Chain
+        uint8_t   count;                            // Number of devices
+        uint8_t   index;                            // Device index (device at TDO has index 0)
 #if (DAP_JTAG_DEV_CNT != 0)
-    uint8_t   ir_length[DAP_JTAG_DEV_CNT];      // IR Length in bits
-    uint16_t  ir_before[DAP_JTAG_DEV_CNT];      // Bits before IR
-    uint16_t  ir_after [DAP_JTAG_DEV_CNT];      // Bits after IR
+        uint8_t   ir_length[DAP_JTAG_DEV_CNT];      // IR Length in bits
+        uint16_t  ir_before[DAP_JTAG_DEV_CNT];      // Bits before IR
+        uint16_t  ir_after [DAP_JTAG_DEV_CNT];      // Bits after IR
 #endif
-  } jtag_dev;
+    } jtag_dev;
 #endif
 } DAP_Data_t;
 
@@ -200,16 +200,19 @@ extern void     DAP_Setup (void);
 
 // Configurable delay for clock generation
 #define DELAY_SLOW_CYCLES       3       // Number of cycles for one iteration
-static __forceinline void PIN_DELAY_SLOW (uint32_t delay) {
-  volatile int32_t count;
+static __forceinline void PIN_DELAY_SLOW (uint32_t delay)
+{
+    volatile int32_t count;
 
-  count = delay;
-  while (--count);
+    count = delay;
+
+    while (--count);
 }
 
 // Fixed delay for fast clock generation
 #define DELAY_FAST_CYCLES       0       // Number of cycles
-static __forceinline void PIN_DELAY_FAST (void) {
+static __forceinline void PIN_DELAY_FAST (void)
+{
 //__nop();
 }
 

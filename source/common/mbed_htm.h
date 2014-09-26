@@ -37,7 +37,7 @@ void unique_string_auth_config(void);
 uint8_t update_html_file(uint8_t *buffer, uint32_t size);
 
 /**
- Get the auth string. This is sent to CDC and the contents are the same 
+ Get the auth string. This is sent to CDC and the contents are the same
  auth string used in mbed.htm for mbed.org redirection
  @param  none
  @return a pointer to the auth string
@@ -45,7 +45,7 @@ uint8_t update_html_file(uint8_t *buffer, uint32_t size);
 uint8_t *get_web_auth_string(void);
 
 /**
- Get the usb interface descriptor string. Used in USB descriptor to identify 1 of 
+ Get the usb interface descriptor string. Used in USB descriptor to identify 1 of
  many mbeds that can be connected to a single computer
  @param  none
  @return a pointer to the UID string

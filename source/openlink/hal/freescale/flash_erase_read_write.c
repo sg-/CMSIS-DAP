@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 // common API for MSC to work from (CMSIS-DAP or BOOTLOADER)
 #include "MK20D5.H"
 #include "flash_erase_read_write.h"
@@ -91,7 +91,7 @@ uint32_t dnd_erase_chip(void)
     return 0;
 }
 
-//uint32_t __SVC_2 (uint32_t addr) 
+//uint32_t __SVC_2 (uint32_t addr)
 //{
 ////    return erase_sector(addr);
 //    return 0;
@@ -121,7 +121,7 @@ uint32_t dnd_program_page(uint32_t adr, uint8_t *buf, uint32_t size)
 ////    return program_page(adr, buf, size);
 //    return 0;
 //}
-   
+
 
 //uint32_t flash_program_page(uint32_t adr, uint8_t * buf, uint32_t size)
 //{

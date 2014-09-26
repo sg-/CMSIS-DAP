@@ -174,8 +174,8 @@
 #define USBD_MSC_HS_BINTERVAL       0
 #define USBD_MSC_STRDESC            L"USB_MSC"
 #define USBD_MSC_INQUIRY_DATA       "MBED    "         \
-                                    "microcontroller " \
-                                    "1.0 "
+    "microcontroller " \
+    "1.0 "
 
 //     <e0.0> Audio Device (ADC)
 //       <i> Enable class support for Audio Device (ADC)

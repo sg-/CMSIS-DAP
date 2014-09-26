@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #ifndef DEVICE_CFG_H
 #define DEVICE_CFG_H
 
@@ -42,7 +42,7 @@
 /*!< FLASH_SIZE_KB is the size of flash for a given application */
 #define FLASH_SIZE_KB       (NUM_OF_SECTORS-(APP_START_ADR/FLASH_SECTOR_SIZE))
 
-/*!< START_FLASH is the lowest ROM address executable code can be placed. Usually after the NVIC table 
+/*!< START_FLASH is the lowest ROM address executable code can be placed. Usually after the NVIC table
         and is used to validate an image by looking at the NVIC entries */
 #define START_FLASH	        0x410
 

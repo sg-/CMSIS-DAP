@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #ifndef VIRTUAL_FS_H
 #define VIRTUAL_FS_H
 
@@ -24,7 +24,7 @@
  @addtogroup
  @{
  */
- 
+
 // These error symbols messages need to match the text in reason_array and the order too
 #define SWD_ERROR               0
 #define BAD_EXTENSION_FILE      1
@@ -142,7 +142,7 @@ typedef struct {
 } FILE_TYPE_MAPPING;
 
 typedef struct sector {
-    const uint8_t * sect;
+    const uint8_t *sect;
     unsigned int length;
 } SECTOR;
 

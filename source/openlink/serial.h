@@ -21,7 +21,7 @@
 /* UART port assignments */
 #if defined(MBED_EXT) || defined (UART_TEST)
 #define UART_TARGET    (0)     /* UART connected to the external target via JTAG connector */
-                         /* No debug UART on external build */
+/* No debug UART on external build */
 #else
 #define UART_TARGET    (1)     /* UART connected to the on-board target */
 #define UART_DEBUG     (0)     /* UART used for debug output */

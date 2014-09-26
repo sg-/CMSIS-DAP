@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #include "gpio.h"
 #include "MK20D5.h"
 
@@ -27,9 +27,11 @@ void time_delay_ms(uint32_t delay)
     LPTMR0->CMR = delay;
     LPTMR0->PSR = LPTMR_PSR_PCS(1) | LPTMR_PSR_PBYP_MASK;
     LPTMR0->CSR |= LPTMR_CSR_TEN_MASK;
+
     while (!(LPTMR0->CSR & LPTMR_CSR_TCF_MASK));
+
     LPTMR0->CSR &= ~LPTMR_CSR_TEN_MASK;
-	return;
+    return;
 }
 
 void gpio_init(void)
@@ -44,10 +46,10 @@ void gpio_init(void)
 
     // RST button
     PORTB->PCR[1] = PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(1);
-	
-	// delay 2ms for pull-up enable
-	time_delay_ms(2);
-	return;
+
+    // delay 2ms for pull-up enable
+    time_delay_ms(2);
+    return;
 }
 
 void gpio_set_dap_led(uint8_t state)
@@ -57,6 +59,7 @@ void gpio_set_dap_led(uint8_t state)
     } else {
         PTD->PSOR  |= MSD_LED_BIT_NUMBER; // LED off
     }
+
     return;
 }
 

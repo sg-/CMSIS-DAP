@@ -22,7 +22,8 @@ typedef void (*IAP)(uint32_t[], uint32_t[]);
 static IAP iap_entry;
 
 
-void read_unique_id(uint32_t * id) {
+void read_unique_id(uint32_t *id)
+{
     // readUID IAP call
     iap_entry = (IAP) IAP_LOCATION;
     command[0] = 58;

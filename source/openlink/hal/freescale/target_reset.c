@@ -48,6 +48,7 @@ uint8_t target_unlock_sequence(void)
     // flash in secured mode
     if (val & (1 << 2)) {
         target_set_state(RESET_HOLD);
+
         while (1) {
             if (!swd_write_ap(MDM_CTRL, 1)) {
                 return 0;
@@ -84,7 +85,8 @@ uint8_t target_unlock_sequence(void)
     return 1;
 }
 
-uint8_t target_set_state(TARGET_RESET_STATE state) {
+uint8_t target_set_state(TARGET_RESET_STATE state)
+{
     return swd_set_target_state(state);
 }
 

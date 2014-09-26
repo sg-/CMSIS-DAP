@@ -20,43 +20,43 @@
 
 /* Parity enumerator */
 typedef enum {
-  UART_PARITY_NONE    = 0,
-  UART_PARITY_ODD     = 1,
-  UART_PARITY_EVEN    = 2,
-  UART_PARITY_MARK    = 3,
-  UART_PARITY_SPACE   = 4
+    UART_PARITY_NONE    = 0,
+    UART_PARITY_ODD     = 1,
+    UART_PARITY_EVEN    = 2,
+    UART_PARITY_MARK    = 3,
+    UART_PARITY_SPACE   = 4
 } UART_Parity;
 
 /* Stop Bits enumerator */
 typedef enum {
-  UART_STOP_BITS_1    = 0,
-  UART_STOP_BITS_1_5  = 1,
-  UART_STOP_BITS_2    = 2
+    UART_STOP_BITS_1    = 0,
+    UART_STOP_BITS_1_5  = 1,
+    UART_STOP_BITS_2    = 2
 } UART_StopBits;
 
 /* Data Bits enumerator */
 typedef enum {
-  UART_DATA_BITS_5    = 5,
-  UART_DATA_BITS_6    = 6,
-  UART_DATA_BITS_7    = 7,
-  UART_DATA_BITS_8    = 8,
-  UART_DATA_BITS_16   = 16
+    UART_DATA_BITS_5    = 5,
+    UART_DATA_BITS_6    = 6,
+    UART_DATA_BITS_7    = 7,
+    UART_DATA_BITS_8    = 8,
+    UART_DATA_BITS_16   = 16
 } UART_DataBits;
 
 /* Flow control enumerator */
 typedef enum {
-  UART_FLOW_CONTROL_NONE     = 0,
-  UART_FLOW_CONTROL_RTS_CTS  = 1,
-  UART_FLOW_CONTROL_XON_XOFF = 2
+    UART_FLOW_CONTROL_NONE     = 0,
+    UART_FLOW_CONTROL_RTS_CTS  = 1,
+    UART_FLOW_CONTROL_XON_XOFF = 2
 } UART_FlowControl;
 
 /* UART Port Properties structure */
 typedef struct {
-  uint32_t           Baudrate;
-  UART_DataBits      DataBits;
-  UART_Parity        Parity;
-  UART_StopBits      StopBits;
-  UART_FlowControl   FlowControl;
+    uint32_t           Baudrate;
+    UART_DataBits      DataBits;
+    UART_Parity        Parity;
+    UART_StopBits      StopBits;
+    UART_FlowControl   FlowControl;
 } UART_Configuration;
 
 /*-----------------------------------------------------------------------------

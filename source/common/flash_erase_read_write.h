@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #ifndef FLASH_ERASE_READ_WRITE_H
 #define FLASH_ERASE_READ_WRITE_H
 

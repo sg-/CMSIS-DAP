@@ -80,18 +80,20 @@ static USB_BUSY usb_busy = USB_IDLE;
 static uint32_t usb_busy_count = STARTUP_DELAY;
 
 // align stack on 64bit boundry
-static uint64_t stk_timer_task[TIMER_TASK_STACK/8];
-static uint64_t stk_main_task [MAIN_TASK_STACK/8];
-static uint64_t stk_msc_task  [MSC_TASK_STACK/8];
+static uint64_t stk_timer_task[TIMER_TASK_STACK / 8];
+static uint64_t stk_main_task [MAIN_TASK_STACK / 8];
+static uint64_t stk_msc_task  [MSC_TASK_STACK / 8];
 
 // Timer task, set flags every 30mS and 90mS
-__task void timer_task_30mS(void) {
+__task void timer_task_30mS(void)
+{
     uint8_t i = 0;
     os_itv_set(3); // 30mS
 
     while(1) {
         os_itv_wait();
         os_evt_set(FLAGS_MAIN_30MS, main_task_id);
+
         if (!(i++ % 3)) {
             os_evt_set(FLAGS_MAIN_90MS, main_task_id);
         }
@@ -99,21 +101,24 @@ __task void timer_task_30mS(void) {
 }
 
 // Flash MSD LED using 30mS tick
-void main_blink_msd_led(uint8_t permanent) {
+void main_blink_msd_led(uint8_t permanent)
+{
     msd_led_usb_activity = 1;
     msd_led_state = (permanent) ? LED_FLASH_PERMANENT : LED_FLASH;
     return;
 }
 
 // MSC data transfer in progress
-void main_usb_busy_event(void) {
+void main_usb_busy_event(void)
+{
     usb_busy_count = USB_BUSY_TIME;
     usb_busy = USB_ACTIVE;
     return;
 }
 
 // A new binary has been flashed in the target
-void main_usb_disconnect_event(void) {
+void main_usb_disconnect_event(void)
+{
     os_evt_set(FLAGS_MAIN_USB_DISCONNECT, main_task_id);
     return;
 }
@@ -150,9 +155,9 @@ __task void main_task(void)
     while(1) {
         // need to create a new event for programming failure
         os_evt_wait_or(   FLAGS_MAIN_90MS               // 90mS tick
-                        | FLAGS_MAIN_30MS               // 30mS tick
-                        | FLAGS_MAIN_USB_DISCONNECT     // Disable target debug
-                        , NO_TIMEOUT );
+                          | FLAGS_MAIN_30MS               // 30mS tick
+                          | FLAGS_MAIN_USB_DISCONNECT     // Disable target debug
+                          , NO_TIMEOUT );
 
         // Find out what event happened
         flags = os_evt_get();
@@ -174,16 +179,18 @@ __task void main_task(void)
                     if (DECZERO(usb_busy_count) == 0) {
                         usb_busy = USB_IDLE;
                     }
+
                     break;
 
                 case USB_IDLE:
                     blink_count++;
+
                     if (!(blink_count % 11)) {
                         gpio_set_all_leds(1);
-                    }
-                    else {
+                    } else {
                         gpio_set_all_leds(0);
                     }
+
                 default:
                     break;
             }
@@ -192,15 +199,18 @@ __task void main_task(void)
             switch (usb_state) {
 
                 case USB_DISCONNECTING:
+
                     // Wait until USB is idle before disconnecting
                     if (usb_busy == USB_IDLE && (DECZERO(usb_state_count) == 0)) {
                         usbd_connect(0);
                         os_tsk_delete(msc_task);
                         usb_state = USB_DISCONNECTED;
                     }
+
                     break;
 
                 case USB_DISCONNECT_CONNECT:
+
                     // Wait until USB is idle before disconnecting
                     if ((usb_busy == USB_IDLE) && (DECZERO(usb_state_count) == 0)) {
                         usbd_connect(0);
@@ -208,21 +218,25 @@ __task void main_task(void)
                         // Delay the connecting state before reconnecting to the host - improved usage with VMs
                         usb_state_count = 10; //(90ms * 10 = 900ms)
                     }
+
                     break;
 
                 case USB_CONNECTING:
+
                     // Wait before connecting
                     if (DECZERO(usb_state_count) == 0) {
                         msc_task = os_tsk_create_user(msc_valid_file_timeout_task, MSC_TASK_PRIORITY, stk_msc_task, MSC_TASK_STACK);
                         usbd_connect(1);
                         usb_state = USB_CHECK_CONNECTED;
                     }
+
                     break;
 
                 case USB_CHECK_CONNECTED:
                     if(usbd_configured()) {
                         usb_state = USB_CONNECTED;
                     }
+
                     break;
 
                 case USB_DISCONNECTED:
@@ -234,7 +248,7 @@ __task void main_task(void)
                 default:
                     break;
             }
-         }
+        }
 
         // 30mS tick used for flashing LED when USB is busy
         if (flags & FLAGS_MAIN_30MS) {
@@ -244,6 +258,7 @@ __task void main_task(void)
                     msd_led_value = 0; // Turn off
                 } else {
                     msd_led_value = 1; // Turn on
+
                     if (msd_led_state == LED_FLASH) {
                         msd_led_usb_activity = 0;
                     }
@@ -261,14 +276,15 @@ int main (void)
 {
     // leds and button
     gpio_init();
+
     // check for invalid app image or rst button press
-    if (gpio_get_rst_pin_state() && validate_application())
-    {
+    if (gpio_get_rst_pin_state() && validate_application()) {
         // change to the new vector table
         relocate_vector_table_app();
         // modify stack pointer and start app
-        modify_stack_pointer_and_start_app(*(uint32_t *)app.flash_start, *(uint32_t *)(app.flash_start+4));
+        modify_stack_pointer_and_start_app(*(uint32_t *)app.flash_start, *(uint32_t *)(app.flash_start + 4));
     }
+
     // config the usb interface descriptor and web auth token before USB connects
     unique_string_auth_config();
     // either the rst pin was pressed or we have an empty app region

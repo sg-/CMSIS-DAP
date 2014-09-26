@@ -37,7 +37,7 @@ typedef struct {
     uint32_t program_buffer;
     uint32_t algo_start;
     uint32_t algo_size;
-    const uint32_t * image;
+    const uint32_t *image;
 
     uint32_t ram_to_flash_bytes_to_be_written;
 

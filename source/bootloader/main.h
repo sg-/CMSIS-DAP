@@ -26,7 +26,7 @@
 /**
  @enum USB_BUSY
  @brief Defines the state of the USB connection
- */ 
+ */
 typedef enum {
     USB_IDLE,   /*!< USB_IDLE value means no bus activity */
     USB_ACTIVE  /*!< USB_ACTIVE value means MSC transfers are occuring */
@@ -35,7 +35,7 @@ typedef enum {
 /**
  @enum USB_CONNECT
  @brief Statest the USB connection can be in
- */ 
+ */
 typedef enum {
     USB_DISCONNECTED,       /*!< USB_DISCONNECTED state for a USB */
     USB_CONNECTING,         /*!< USB_CONNECTING state for a USB */
