@@ -14,41 +14,69 @@
  * limitations under the License.
  */
  
-// common API for MSC to work from (CMSIS-DAP or BOOTLOADER)
-#include "flash_erase_read_write.h" 
+#include "flash_erase_read_write.h"
+#include "firmware_cfg.h"
+#include "flash_algo.h"
 
-// Specific resources for device FLASH read/write
-
-
-int flash_init(uint32_t clk)
+uint32_t dnd_flash_init(uint32_t clk)
 {
-    return 0;
+    // from flash_algo.c, 1 is failing and 0 is passing
+    return (Init(0, 0, 0)) ? 0 : 1;
 }
 
-int flash_uninit(void)
+uint32_t dnd_flash_uninit(void)
 {
-    return 0;
+    // from flash_algo.c, 1 is failing and 0 is passing
+    return (UnInit(0)) ? 0 : 1;
 }
 
-int flash_erase_chip(void)
+uint32_t __SVC_2 (uint32_t num) 
 {
-    return 0;
+    uint32_t res = 0;
+    NVIC_DisableIRQ(USB_IRQn);
+    res = EraseSector(num * app.sector_size);
+    NVIC_EnableIRQ(USB_IRQn);
+    // from flash_algo.c, 1 is failing and 0 is passing
+    return !res;
 }
 
-int flash_erase_sector(uint32_t adr)
+uint32_t dnd_erase_sector(uint32_t num)
 {
-    return 0;
+    return erase_sector_svc(num);
 }
 
-int flash_program_page(uint32_t adr, uint8_t * buf, uint32_t size)
+uint32_t dnd_erase_chip(void)
 {
-    return 0;
-}
-uint32_t read_memory(uint32_t adr, uint8_t *buf, uint32_t size)
-{
-	char *start_address = (char *)adr;
-    while(size--) {
-        *buf++ = *(char *)adr++;
+    uint32_t i = app.flash_start;
+    // dont erase the bootloader, just the app region 
+    for( ; i < app.flash_end; i += app.sector_size) {
+        if (!erase_sector_svc(i / app.sector_size)) {
+            return 0;
+        }
     }
-    return adr - *(char *)start_address;
+    return 1;
+}
+
+uint32_t __SVC_3 (uint32_t adr, uint8_t *buf, uint32_t size)
+{
+    uint32_t res = 0;
+    NVIC_DisableIRQ(USB_IRQn);
+    res = ProgramPage(adr, size, buf);
+    NVIC_EnableIRQ(USB_IRQn);
+    // from flash_algo.c, 1 is failing and 0 is passing 
+    return !res;
+}
+
+uint32_t dnd_program_page(uint32_t adr, uint8_t * buf, uint32_t size)
+{
+    return program_page_svc(adr, buf, size);
+}
+
+uint32_t dnd_read_memory(uint32_t adr, uint8_t *buf, uint32_t size)
+{
+	uint8_t *start_address = (uint8_t *)adr;
+    while(size--) {
+        *buf++ = *(uint8_t *)adr++;
+    }
+    return adr - *(uint8_t *)start_address;
 }

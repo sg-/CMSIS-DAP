@@ -50,7 +50,7 @@ extern fw_cfg_t const app;
 }
 #endif
 
-// dirty hack until virtual_vs is re-written to not use macros...
+// dirty hack until virtual_fs is re-written to not use macros...
 #if defined(BOOTLOADER) && defined(K20DX128)
 // TARGET_MK20DX,  K20DX128,  CPU_MK20DX128VFM5,  __RTX,  BOOTLOADER, 
 #include "MK20D5.h"
