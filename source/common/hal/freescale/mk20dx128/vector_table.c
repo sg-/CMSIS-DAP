@@ -22,16 +22,13 @@ void relocate_vector_table_ram(void)
 {
     uint32_t *vectors;
     uint32_t i;
-
     // Copy and switch to dynamic vectors if the first time called
     if (SCB->VTOR != app.ram_start) {
         uint32_t *old_vectors = (uint32_t *)app.flash_start;
         vectors = (uint32_t *)app.ram_start;
-
-        for (i = 0; i < (16 + 46); i++) {
+        for (i = 0; i < (16+46); i++) {
             vectors[i] = old_vectors[i];
         }
-
         SCB->VTOR = app.ram_start;
     }
 }

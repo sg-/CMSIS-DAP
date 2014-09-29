@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 #ifndef USBD_USER_MSC_H
 #define USBD_USER_MSC_H
 

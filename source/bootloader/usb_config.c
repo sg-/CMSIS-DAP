@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 /*------------------------------------------------------------------------------
  *      USB Device Configuration
  *----------------------------------------------------------------------------*/
-
+ 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 //
 // <e> USB Device
@@ -177,7 +177,7 @@
 #define USBD_MSC_HS_BINTERVAL       0
 #define USBD_MSC_STRDESC            L"USB_MSC"
 #define USBD_MSC_INQUIRY_DATA       "MBED    "         \
-    "BOOTLOADER "
+                                    "BOOTLOADER "
 
 //     <e0.0> Audio Device (ADC)
 //       <i> Enable class support for Audio Device (ADC)

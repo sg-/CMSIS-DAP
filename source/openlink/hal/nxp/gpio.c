@@ -38,8 +38,7 @@ static OS_TID isr_notify;
 #define PIN_MSD_LED       (1<<20)
 #define PIN_CDC_LED       (1<<11)
 
-void gpio_init(void)
-{
+void gpio_init(void) {
     // enable clock for GPIO port 0
     LPC_SYSCON->SYSAHBCLKCTRL |= (1UL << 6);
 
@@ -53,7 +52,7 @@ void gpio_init(void)
     LPC_GPIO->CLR[0]  |= (PIN_MSD_LED);
 
     // Serial LED (blue)
-    LPC_IOCON->TDI_PIO0_11 |= 0x01;
+      LPC_IOCON->TDI_PIO0_11 |= 0x01;
     LPC_GPIO->DIR[0]  |= (PIN_CDC_LED);
     LPC_GPIO->CLR[0]  |= (PIN_CDC_LED);
 
@@ -63,11 +62,10 @@ void gpio_init(void)
 #endif
 
     /* Enable AHB clock to the FlexInt, GroupedInt domain. */
-    LPC_SYSCON->SYSAHBCLKCTRL |= ((1 << 19) | (1 << 23) | (1 << 24));
+    LPC_SYSCON->SYSAHBCLKCTRL |= ((1<<19) | (1<<23) | (1<<24));
 }
 
-void gpio_set_dap_led(uint8_t state)
-{
+void gpio_set_dap_led(uint8_t state) {
     if (state) {
         LPC_GPIO->SET[0] |= (PIN_DAP_LED);
     } else {
@@ -75,17 +73,15 @@ void gpio_set_dap_led(uint8_t state)
     }
 }
 
-void gpio_set_cdc_led(uint8_t state)
-{
+void gpio_set_cdc_led(uint8_t state) {
     if (state) {
-        LPC_GPIO->SET[0] |= (PIN_CDC_LED);
+      LPC_GPIO->SET[0] |= (PIN_CDC_LED);
     } else {
-        LPC_GPIO->CLR[0] |= (PIN_CDC_LED);
+      LPC_GPIO->CLR[0] |= (PIN_CDC_LED);
     }
 }
 
-void gpio_set_msd_led(uint8_t state)
-{
+void gpio_set_msd_led(uint8_t state) {
     if (state) {
         LPC_GPIO->SET[0] |= (PIN_MSD_LED);
     } else {
@@ -93,22 +89,20 @@ void gpio_set_msd_led(uint8_t state)
     }
 }
 
-void gpio_enable_button_flag(OS_TID task, uint16_t flags)
-{
+void gpio_enable_button_flag(OS_TID task, uint16_t flags) {
     /* When the "reset" button is pressed the ISR will set the */
     /* event flags "flags" for task "task" */
 
     /* Keep a local copy of task & flags */
-    isr_notify = task;
-    isr_flags = flags;
+    isr_notify=task;
+    isr_flags=flags;
 
 #if SW_RESET_BUTTON
     LPC_SYSCON->STARTERP0 |= RESET_INT_MASK;
     LPC_SYSCON->PINTSEL[RESET_INT_CH] = (RESET_PORT) ? (RESET_PIN + 24) : (RESET_PIN);
 
-    if (!(LPC_GPIO_PIN_INT->ISEL & RESET_INT_MASK)) {
+    if (!(LPC_GPIO_PIN_INT->ISEL & RESET_INT_MASK))
         LPC_GPIO_PIN_INT->IST = RESET_INT_MASK;
-    }
 
     LPC_GPIO_PIN_INT->IENF |= RESET_INT_MASK;
 
@@ -116,8 +110,7 @@ void gpio_enable_button_flag(OS_TID task, uint16_t flags)
 #endif
 }
 
-void FLEX_INT0_IRQHandler()
-{
+void FLEX_INT0_IRQHandler() {
     isr_evt_set(isr_flags, isr_notify);
     NVIC_DisableIRQ(FLEX_INT0_IRQn);
 

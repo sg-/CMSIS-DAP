@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 #include "LPC11Uxx.h"
 
 #include "gpio.h"
@@ -24,7 +24,7 @@
 
 void time_delay_ms(uint32_t delay)
 {
-    return;
+	return;
 }
 
 void gpio_init(void)
@@ -34,10 +34,10 @@ void gpio_init(void)
     // LED outut config
 
     // RST button
-
-    // delay 2ms for pull-up enable
-    time_delay_ms(2);
-    return;
+	
+	// delay 2ms for pull-up enable
+	time_delay_ms(2);
+	return;
 }
 
 void gpio_set_dap_led(uint8_t state)
@@ -47,7 +47,6 @@ void gpio_set_dap_led(uint8_t state)
     } else {
 // LED off
     }
-
     return;
 }
 

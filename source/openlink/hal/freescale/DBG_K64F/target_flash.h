@@ -28,7 +28,7 @@ static uint8_t target_flash_init(uint32_t clk);
 static uint8_t target_flash_uninit(void);
 static uint8_t target_flash_erase_chip(void);
 static uint8_t target_flash_erase_sector(uint32_t adr);
-static uint8_t target_flash_program_page(uint32_t adr, uint8_t *buf, uint32_t size);
+static uint8_t target_flash_program_page(uint32_t adr, uint8_t * buf, uint32_t size);
 
 
 static const uint32_t K64F_FLM[] = {
@@ -77,23 +77,22 @@ static const TARGET_FLASH flash = {
     0x200000CB, // ProgramPage
 
     // RAM start + 1, RAM start + size of algo??, top of stack = start of RAM + 4096??
-    {0x20000001, 0x20000000 + sizeof(K64F_FLM), 0x20001000}, // {breakpoint, static_base, stack_pointer}
+	{0x20000001, 0x20000000+sizeof(K64F_FLM), 0x20001000}, // {breakpoint, static_base, stack_pointer}
 
     // any valid RAM location with +512 bytes of headroom
-    0x20003000, // program_buffer
+	0x20003000, // program_buffer
     // start of RAM
-    0x20000000, // algo_start
+	0x20000000, // algo_start
     // size of array above
-    sizeof(K64F_FLM), // algo_size
+	sizeof(K64F_FLM), // algo_size
     // flash algo instruction array
-    K64F_FLM,  // image
+	K64F_FLM,  // image
 
     512,        // ram_to_flash_bytes_to_be_written
 };
 
 
-static uint8_t target_flash_init(uint32_t clk)
-{
+static uint8_t target_flash_init(uint32_t clk) {
     // Download flash programming algorithm to target and initialise.
     if (!swd_write_memory(flash.algo_start, (uint8_t *)flash.image, flash.algo_size)) {
         return 0;
@@ -106,8 +105,7 @@ static uint8_t target_flash_init(uint32_t clk)
     return 1;
 }
 
-static uint8_t target_flash_erase_sector(unsigned int sector)
-{
+static uint8_t target_flash_erase_sector(unsigned int sector) {
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_sector, sector * 0x400, 0, 0, 0)) {
         return 0;
     }
@@ -115,8 +113,7 @@ static uint8_t target_flash_erase_sector(unsigned int sector)
     return 1;
 }
 
-static uint8_t target_flash_erase_chip(void)
-{
+static uint8_t target_flash_erase_chip(void) {
     if (!swd_flash_syscall_exec(&flash.sys_call_param, flash.erase_chip, 0, 0, 0, 0)) {
         return 0;
     }
@@ -124,10 +121,8 @@ static uint8_t target_flash_erase_chip(void)
     return 1;
 }
 
-static uint8_t check_security_bits(uint32_t flashAddr, uint8_t *data)
-{
+static uint8_t check_security_bits(uint32_t flashAddr, uint8_t *data) {
     uint16_t i = 0;
-
     // check to not write the security bit!!!!
     if (flashAddr == 0x400) {
         for (i = 0; i < 12; i++) {
@@ -135,16 +130,13 @@ static uint8_t check_security_bits(uint32_t flashAddr, uint8_t *data)
                 return 0;
             }
         }
-
-        if ((data[14] != 0xff) || (data[15] != 0xff)) {
+        if ((data[14] != 0xff) || (data[15] != 0xff))
             return 0;
-        }
     }
-
     return 1;
 }
 
-static uint8_t target_flash_program_page(uint32_t addr, uint8_t *buf, uint32_t size)
+static uint8_t target_flash_program_page(uint32_t addr, uint8_t * buf, uint32_t size)
 {
     uint32_t bytes_written = 0;
 

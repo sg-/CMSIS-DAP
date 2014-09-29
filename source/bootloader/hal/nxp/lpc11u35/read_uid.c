@@ -17,7 +17,6 @@
 #include "LPC11Uxx.h"
 #include "read_uid.h"
 
-void read_unique_id(uint32_t *id)
-{
+void read_unique_id(uint32_t * id) {
     *id = 0/*SIM->UIDL ^ SIM->UIDML ^ SIM->UIDMH ^ SIM->UIDH*/;
 }

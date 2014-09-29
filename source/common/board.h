@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 #ifndef BOARD_H
 #define BOARD_H
 
@@ -28,7 +28,7 @@
 /**
  @struct BOARD
  @brief Each board should have a unique ID and secret. To obtain a secret contact support@mbed.org
- */
+ */ 
 typedef struct {
     const uint8_t  id[5];       /*!< id is a 4 character ascii */
     const uint8_t  secret[9];   /*!< secret is is 8 character acsii hex string */

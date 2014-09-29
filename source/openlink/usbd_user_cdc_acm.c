@@ -33,8 +33,7 @@ UART_Configuration UART_Config;
     \return             0        Function failed.
     \return             1        Function succeeded.
  */
-int32_t USBD_CDC_ACM_PortInitialize (void)
-{
+int32_t USBD_CDC_ACM_PortInitialize (void) {
     return (serial_initialize ());
 }
 
@@ -47,8 +46,7 @@ int32_t USBD_CDC_ACM_PortInitialize (void)
     \return             0        Function failed.
     \return             1        Function succeeded.
  */
-int32_t USBD_CDC_ACM_PortUninitialize (void)
-{
+int32_t USBD_CDC_ACM_PortUninitialize (void) {
     return (serial_uninitialize ());
 }
 
@@ -61,8 +59,7 @@ int32_t USBD_CDC_ACM_PortUninitialize (void)
     \return             0        Function failed.
     \return             1        Function succeeded.
  */
-int32_t USBD_CDC_ACM_PortReset (void)
-{
+int32_t USBD_CDC_ACM_PortReset (void) {
     return (serial_reset ());
 }
 
@@ -76,8 +73,7 @@ int32_t USBD_CDC_ACM_PortReset (void)
     \return             0        Function failed.
     \return             1        Function succeeded.
  */
-int32_t USBD_CDC_ACM_PortSetLineCoding (CDC_LINE_CODING *line_coding)
-{
+int32_t USBD_CDC_ACM_PortSetLineCoding (CDC_LINE_CODING *line_coding) {
     UART_Config.Baudrate    = line_coding->dwDTERate;
     UART_Config.DataBits    = (UART_DataBits) line_coding->bDataBits;
     UART_Config.Parity      = (UART_Parity)   line_coding->bParityType;
@@ -97,8 +93,7 @@ int32_t USBD_CDC_ACM_PortSetLineCoding (CDC_LINE_CODING *line_coding)
     \return             0        Function failed.
     \return             1        Function succeeded.
  */
-int32_t USBD_CDC_ACM_PortGetLineCoding (CDC_LINE_CODING *line_coding)
-{
+int32_t USBD_CDC_ACM_PortGetLineCoding (CDC_LINE_CODING *line_coding) {
     if (serial_get_configuration (&UART_Config)) {
         line_coding->dwDTERate   = UART_Config.Baudrate;
         line_coding->bDataBits   = UART_Config.DataBits;
@@ -112,17 +107,14 @@ int32_t USBD_CDC_ACM_PortGetLineCoding (CDC_LINE_CODING *line_coding)
 
 
 static U32 start_break_time = 0;
-int32_t USBD_CDC_ACM_SendBreak (uint16_t dur)
-{
+int32_t USBD_CDC_ACM_SendBreak (uint16_t dur) {
     uint32_t end_break_time;
-
     // reset and send the unique id over CDC
     if (dur != 0) {
         start_break_time = os_time_get();
         target_set_state(RESET_HOLD);
     } else {
         end_break_time = os_time_get();
-
         // long reset -> send uID over serial (300 -> break > 3s)
         if ((end_break_time - start_break_time) >= (300)) {
             main_reset_target(1);
@@ -130,7 +122,6 @@ int32_t USBD_CDC_ACM_SendBreak (uint16_t dur)
             main_reset_target(0);
         }
     }
-
     return 0;
 }
 
@@ -146,7 +137,6 @@ int32_t USBD_CDC_ACM_SendBreak (uint16_t dur)
     \return             0        Function failed.
     \return             1        Function succeeded.
  */
-int32_t USBD_CDC_ACM_PortSetControlLineState (uint16_t ctrl_bmp)
-{
+int32_t USBD_CDC_ACM_PortSetControlLineState (uint16_t ctrl_bmp) {
     return (1);
 }

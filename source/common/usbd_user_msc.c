@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-//TODO: still needs cleanup, and error code improvement. Use binary check for start of
-// bin file and validate the FLASH and RAM values as done at startup.
-// config funcs needed and also another good comb through.
-// validating the NVIC table should also allow us to ignore the file extensions...
-
+ 
+ //TODO: still needs cleanup, and error code improvement. Use binary check for start of 
+ // bin file and validate the FLASH and RAM values as done at startup.
+ // config funcs needed and also another good comb through.
+ // validating the NVIC table should also allow us to ignore the file extensions...
+ 
 #include "RTL.h"
 #include "rl_usb.h"
 
@@ -66,7 +66,7 @@
 //#warning target not defined 1024
 //#endif
 
-#include "virtual_fs.h"
+#include "virtual_fs.h"  
 
 extern USB_CONNECT usb_state;
 
@@ -111,14 +111,12 @@ static void initDisconnect(uint8_t success);
 // is a valid .bin file and when we have received
 // all the sectors that we don't receive new valid sectors
 // after a certain timeout
-__task void msc_valid_file_timeout_task(void)
-{
+__task void msc_valid_file_timeout_task(void) {
     uint32_t flags = 0;
     OS_RESULT res;
     uint32_t start_timeout_time = 0, time_now = 0;
     uint8_t timer_started = 0;
     msc_valid_file_timeout_task_id = os_tsk_self();
-
     while (1) {
         res = os_evt_wait_or(MSC_TIMEOUT_SPLIT_FILES_EVENT | MSC_TIMEOUT_START_EVENT | MSC_TIMEOUT_STOP_EVENT | MSC_TIMEOUT_RESTART_EVENT, 100);
 
@@ -155,7 +153,6 @@ __task void msc_valid_file_timeout_task(void)
         } else {
             if (timer_started) {
                 time_now = os_time_get();
-
                 // timeout
                 if ((time_now - start_timeout_time) > TIMEOUT_S) {
                     timer_started = 0;
@@ -167,12 +164,10 @@ __task void msc_valid_file_timeout_task(void)
     }
 }
 
-void init(uint8_t jtag)
-{
+void init(uint8_t jtag) {
     size = 0;
     nb_sector = 0;
     current_sector = 0;
-
     if (jtag) {
         jtag_flash_init = 0;
         theoretical_start_sector = (drag_success) ? 7 : 8;
@@ -181,7 +176,6 @@ void init(uint8_t jtag)
         maybe_erase = 0;
         previous_sector = 0;
     }
-
     begin_sector = 0;
     flashPtr = 0;   // load the offset for the application
     sector_received_first = 0;
@@ -194,39 +188,34 @@ void init(uint8_t jtag)
     flash_addr_offset = 0;
 }
 
-void failSWD()
-{
+void failSWD() {
     reason = SWD_ERROR;
     initDisconnect(0);
 }
 
 /*DAP*///extern DAP_Data_t DAP_Data;  // DAP_Data.debug_port
 
-static void initDisconnect(uint8_t success)
-{
+static void initDisconnect(uint8_t success) {
     drag_success = success;
 #if 0       // reset and run target
-
     if (success) {
         swd_set_target_state(RESET_RUN);
     }
-
 #endif
     main_blink_msd_led(0);
     init(1);
     isr_evt_set(MSC_TIMEOUT_STOP_EVENT, msc_valid_file_timeout_task_id);
     // event to disconnect the usb
     main_usb_disconnect_event();
-    /*DAP*///    semihost_enable();
+/*DAP*///    semihost_enable();
 }
 
 extern uint32_t SystemCoreClock;
 
-int jtag_init()
-{
-    /*DAP*///    if (DAP_Data.debug_port != DAP_PORT_DISABLED) {
-    /*DAP*///        need_restart_usb = 1;
-    /*DAP*///    }
+int jtag_init() {
+/*DAP*///    if (DAP_Data.debug_port != DAP_PORT_DISABLED) {
+/*DAP*///        need_restart_usb = 1;
+/*DAP*///    }
 
     /*DAP*///if ((jtag_flash_init != 1) && (DAP_Data.debug_port == DAP_PORT_DISABLED)) {
     if (jtag_flash_init != 1) {
@@ -236,12 +225,11 @@ int jtag_init()
             return 1;
         }
 
-        /*DAP*///        semihost_disable();
+/*DAP*///        semihost_disable();
 
-        /*DAP*///        PORT_SWD_SETUP();
+/*DAP*///        PORT_SWD_SETUP();
 
-        /*DAP*///        target_set_state(RESET_PROGRAM);
-
+/*DAP*///        target_set_state(RESET_PROGRAM);
         if (!dnd_flash_init(SystemCoreClock)) {
             failSWD();
             return 1;
@@ -249,7 +237,6 @@ int jtag_init()
 
         jtag_flash_init = 1;
     }
-
     return 0;
 }
 
@@ -260,21 +247,19 @@ static const FILE_TYPE_MAPPING file_type_infos[] = {
     { PAR_FILE, {'P', 'A', 'R'}, 0x00000000 },//strange extension on win IE 9...
     { DOW_FILE, {'D', 'O', 'W'}, 0x00000000 },//strange extension on mac...
     { CRD_FILE, {'C', 'R', 'D'}, 0x00000000 },//strange extension on linux...
-    { UNSUP_FILE, {0, 0, 0},     0            }, //end of table marker
+    { UNSUP_FILE, {0,0,0},     0            },//end of table marker
 };
 
-static FILE_TYPE get_file_type(const FatDirectoryEntry_t *pDirEnt, uint32_t *pAddrOffset)
-{
+static FILE_TYPE get_file_type(const FatDirectoryEntry_t* pDirEnt, uint32_t* pAddrOffset) {
     int i;
     char e0 = pDirEnt->filename[8];
     char e1 = pDirEnt->filename[9];
     char e2 = pDirEnt->filename[10];
     char f0 = pDirEnt->filename[0];
-
     for (i = 0; file_type_infos[i].type != UNSUP_FILE; i++) {
         if ((e0 == file_type_infos[i].extension[0]) &&
-                (e1 == file_type_infos[i].extension[1]) &&
-                (e2 == file_type_infos[i].extension[2])) {
+            (e1 == file_type_infos[i].extension[1]) &&
+            (e2 == file_type_infos[i].extension[2])) {
             *pAddrOffset = file_type_infos[i].flash_offset;
             return file_type_infos[i].type;
         }
@@ -283,11 +268,11 @@ static FILE_TYPE get_file_type(const FatDirectoryEntry_t *pDirEnt, uint32_t *pAd
     // Now test if the file has a valid extension and a valid name.
     // This is to detect correct but unsupported 8.3 file names.
     if (( ((e0 >= 'a') && (e0 <= 'z')) || ((e0 >= 'A') && (e0 <= 'Z')) ) &&
-            ( ((e1 >= 'a') && (e1 <= 'z')) || ((e1 >= 'A') && (e1 <= 'Z')) || (e1 == 0x20) ) &&
-            ( ((e2 >= 'a') && (e2 <= 'z')) || ((e2 >= 'A') && (e2 <= 'Z')) || (e2 == 0x20) ) &&
-            ( ((f0 >= 'a') && (f0 <= 'z')) || ((f0 >= 'A') && (f0 <= 'Z')) ) &&
-            (f0 != '.' &&
-             (f0 != '_')) ) {
+        ( ((e1 >= 'a') && (e1 <= 'z')) || ((e1 >= 'A') && (e1 <= 'Z')) || (e1 == 0x20) ) &&
+        ( ((e2 >= 'a') && (e2 <= 'z')) || ((e2 >= 'A') && (e2 <= 'Z')) || (e2 == 0x20) ) &&
+        ( ((f0 >= 'a') && (f0 <= 'z')) || ((f0 >= 'A') && (f0 <= 'Z')) ) &&
+           (f0 != '.' &&
+           (f0 != '_')) ) {
         *pAddrOffset = 0;
         return UNSUP_FILE;
     }
@@ -298,8 +283,7 @@ static FILE_TYPE get_file_type(const FatDirectoryEntry_t *pDirEnt, uint32_t *pAd
 
 // take a look here: http://cs.nyu.edu/~gottlieb/courses/os/kholodov-fat.html
 // to have info on fat file system
-int search_bin_file(uint8_t *root, uint8_t sector)
-{
+int search_bin_file(uint8_t * root, uint8_t sector) {
     // idx is a pointer inside the root dir
     // we begin after all the existing entries
     int idx = 0;
@@ -310,7 +294,7 @@ int search_bin_file(uint8_t *root, uint8_t sector)
     uint8_t hidden_file = 0, adapt_th_sector = 0;
     uint32_t offset = 0;
 
-    FatDirectoryEntry_t *pDirEnts = (FatDirectoryEntry_t *)root;
+    FatDirectoryEntry_t* pDirEnts = (FatDirectoryEntry_t*)root;
 
     if (sector == SECTORS_ROOT_IDX) {
         // move past known existing files in the root dir
@@ -334,7 +318,7 @@ int search_bin_file(uint8_t *root, uint8_t sector)
         file_type = get_file_type(&pDirEnts[i], &offset);
 
         if (file_type == BIN_FILE || file_type == PAR_FILE ||
-                file_type == DOW_FILE || file_type == CRD_FILE || file_type == SPI_FILE) {
+            file_type == DOW_FILE || file_type == CRD_FILE || file_type == SPI_FILE) {
 
             hidden_file = (pDirEnts[i].attributes & 0x02) ? 1 : 0;
 
@@ -342,7 +326,7 @@ int search_bin_file(uint8_t *root, uint8_t sector)
             size = pDirEnts[i].filesize;
 
             if (size == 0) {
-                // skip empty files
+              // skip empty files
                 continue;
             }
 
@@ -359,13 +343,12 @@ int search_bin_file(uint8_t *root, uint8_t sector)
             nb_sector = (size + MBR_BYTES_PER_SECTOR - 1) / MBR_BYTES_PER_SECTOR;
 
             if ( (pDirEnts[i].filename[0] == '_') ||
-                    (pDirEnts[i].filename[0] == '.') ||
-                    (hidden_file && ((pDirEnts[i].filename[0] == '_') || (pDirEnts[i].filename[0] == '.'))) ||
-                    ((pDirEnts[i].filename[0] == 0xE5) && (file_type != CRD_FILE) && (file_type != PAR_FILE))) {
+                 (pDirEnts[i].filename[0] == '.') ||
+                 (hidden_file && ((pDirEnts[i].filename[0] == '_') || (pDirEnts[i].filename[0] == '.'))) ||
+                 ((pDirEnts[i].filename[0] == 0xE5) && (file_type != CRD_FILE) && (file_type != PAR_FILE))) {
                 if (theoretical_start_sector == begin_sector) {
                     adapt_th_sector = 1;
                 }
-
                 size = 0;
                 nb_sector = 0;
                 continue;
@@ -390,26 +373,22 @@ int search_bin_file(uint8_t *root, uint8_t sector)
                 // we don't listen to msd interrupt
                 listen_msc_isr = 0;
 
-                move_sector_start = (begin_sector - start_sector) * MBR_BYTES_PER_SECTOR;
-                nb_sector_to_move = (nb_sector % 2) ? nb_sector / 2 + 1 : nb_sector / 2;
-
+                move_sector_start = (begin_sector - start_sector)*MBR_BYTES_PER_SECTOR;
+                nb_sector_to_move = (nb_sector % 2) ? nb_sector/2 + 1 : nb_sector/2;
                 for (i = 0; i < nb_sector_to_move; i++) {
-                    if (!dnd_read_memory(move_sector_start + (i * app.sector_size), (uint8_t *)usb_buffer, app.sector_size)) {
+                    if (!dnd_read_memory(move_sector_start + (i*app.sector_size), (uint8_t *)usb_buffer, app.sector_size)) {
                         failSWD();
                         return -1;
                     }
-
                     if (!dnd_erase_sector(i)) {
                         failSWD();
                         return -1;
                     }
-
-                    if (!dnd_program_page((i * app.sector_size), (uint8_t *)usb_buffer, app.sector_size)) {
+                    if (!dnd_program_page((i*app.sector_size), (uint8_t *)usb_buffer, app.sector_size)) {
                         failSWD();
                         return -1;
                     }
                 }
-
                 initDisconnect(1);
                 return -1;
             }
@@ -433,19 +412,17 @@ int search_bin_file(uint8_t *root, uint8_t sector)
         theoretical_start_sector += nb_sector;
         init(0);
     }
-
     return (found == 1) ? idx : -1;
 }
 
-static int programPage()
-{
+static int programPage() {
     //The timeout task's timer is resetted every 256kB that is flashed.
     if ((flashPtr >= 0x40000) && ((flashPtr & 0x3ffff) == 0)) {
         isr_evt_set(MSC_TIMEOUT_RESTART_EVENT, msc_valid_file_timeout_task_id);
     }
 
     // if we have received two sectors, write into flash
-    if (!dnd_program_page((flashPtr + flash_addr_offset + app.flash_start), (uint8_t *)usb_buffer, FLASH_PROGRAM_PAGE_SIZE)) {
+    if (!dnd_program_page((flashPtr+flash_addr_offset+app.flash_start), (uint8_t *)usb_buffer, FLASH_PROGRAM_PAGE_SIZE)) {
         // even if there is an error, adapt flashptr
         flashPtr += FLASH_PROGRAM_PAGE_SIZE;
         return 1;
@@ -463,7 +440,7 @@ static int programPage()
 }
 
 void usbd_msc_init ()
-{
+{    
     USBD_MSC_MemorySize = MBR_NUM_NEEDED_SECTORS * MBR_BYTES_PER_SECTOR;
     USBD_MSC_BlockSize  = 512;  // need a define here
     USBD_MSC_BlockGroup = 1;    // and here
@@ -472,11 +449,9 @@ void usbd_msc_init ()
     USBD_MSC_MediaReady = __TRUE;
 }
 
-void usbd_msc_read_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks)
-{
-    if ((usb_state != USB_CONNECTED) || (listen_msc_isr == 0)) {
+void usbd_msc_read_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks) {
+    if ((usb_state != USB_CONNECTED) || (listen_msc_isr == 0))
         return;
-    }
 
     if (USBD_MSC_MediaReady) {
         // blink led not permanently
@@ -522,18 +497,16 @@ void usbd_msc_read_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks)
     }
 }
 
-void usbd_msc_write_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks)
-{
+void usbd_msc_write_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks) {
     int idx_size = 0;
 
-    if ((usb_state != USB_CONNECTED) || (listen_msc_isr == 0)) {
+    if ((usb_state != USB_CONNECTED) || (listen_msc_isr == 0))
         return;
-    }
 
     // we recieve the root directory
-    if ((block == SECTORS_ROOT_IDX) || (block == (SECTORS_ROOT_IDX + 1))) {
+    if ((block == SECTORS_ROOT_IDX) || (block == (SECTORS_ROOT_IDX+1))) {
         // try to find a .bin file in the root directory
-        //  not the best idean since OS's send files with different extensions.
+        //  not the best idean since OS's send files with different extensions. 
         //  Chris R suggested looking for the valid NVIC table, maybe both
         idx_size = search_bin_file(buf, block);
 
@@ -551,7 +524,6 @@ void usbd_msc_write_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks)
                     msc_event_timeout = 1;
                     isr_evt_set(MSC_TIMEOUT_SPLIT_FILES_EVENT, msc_valid_file_timeout_task_id);
                 }
-
                 return;
             }
 
@@ -563,7 +535,6 @@ void usbd_msc_write_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks)
             }
         }
     }
-
     if (block >= SECTORS_ERROR_FILE_IDX) {
 
         main_usb_busy_event();
@@ -602,7 +573,6 @@ void usbd_msc_write_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks)
                         return;
                     }
                 }
-
                 maybe_erase = 0;
                 program_page_error = 0;
             }
@@ -647,21 +617,18 @@ void usbd_msc_write_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks)
                         return;
                     }
                 }
-
                 maybe_erase = 0;
                 program_page_error = 0;
             }
 
             previous_sector = block;
             current_sector++;
-
             if (programPage() == 1) {
                 if (good_file) {
                     reason = RESERVED_BITS;
                     initDisconnect(0);
                     return;
                 }
-
                 program_page_error = 1;
                 return;
             }

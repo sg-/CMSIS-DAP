@@ -22,20 +22,17 @@
 #define NVIC_NUM_VECTORS            // CORE + MCU Peripherals
 #define NVIC_RAM_VECTOR_ADDRESS     // Vectors positioned at start of RAM
 
-void relocate_vector_table()
-{
+void relocate_vector_table() {
     uint32_t *vectors;
     uint32_t i;
 
     // Copy and switch to dynamic vectors if the first time called
     if (SCB->VTOR != NVIC_RAM_VECTOR_ADDRESS) {
-        uint32_t *old_vectors = (uint32_t *)APP_START_ADR;
-        vectors = (uint32_t *)NVIC_RAM_VECTOR_ADDRESS;
-
-        for (i = 0; i < NVIC_NUM_VECTORS; i++) {
+        uint32_t *old_vectors = (uint32_t*)APP_START_ADR;
+        vectors = (uint32_t*)NVIC_RAM_VECTOR_ADDRESS;
+        for (i=0; i<NVIC_NUM_VECTORS; i++) {
             vectors[i] = old_vectors[i];
         }
-
         SCB->VTOR = (uint32_t)NVIC_RAM_VECTOR_ADDRESS;
     }
 }

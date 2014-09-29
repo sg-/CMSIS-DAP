@@ -36,20 +36,19 @@ uint32_t tx_in_progress = 0;
 
 void clear_buffers(void)
 {
-    memset((void *)&read_buffer, 0xBB, sizeof(read_buffer.data));
+    memset((void*)&read_buffer, 0xBB, sizeof(read_buffer.data));
     read_buffer.idx_in = 0;
     read_buffer.idx_out = 0;
     read_buffer.cnt_in = 0;
     read_buffer.cnt_out = 0;
-    memset((void *)&write_buffer, 0xBB, sizeof(read_buffer.data));
+    memset((void*)&write_buffer, 0xBB, sizeof(read_buffer.data));
     write_buffer.idx_in = 0;
     write_buffer.idx_out = 0;
     write_buffer.cnt_in = 0;
     write_buffer.cnt_out = 0;
 }
 
-int32_t uart_initialize (void)
-{
+int32_t uart_initialize (void) {
 
     NVIC_DisableIRQ(UART1_RX_TX_IRQn);
 
@@ -81,8 +80,7 @@ int32_t uart_initialize (void)
     return 1;
 }
 
-int32_t uart_uninitialize (void)
-{
+int32_t uart_uninitialize (void) {
 
     // transmitter and receiver disabled
     UART1->C2 &= ~(UART_C2_RE_MASK | UART_C2_TE_MASK);
@@ -95,8 +93,7 @@ int32_t uart_uninitialize (void)
     return 1;
 }
 
-int32_t uart_reset (void)
-{
+int32_t uart_reset (void) {
 
     // disable interrupt
     NVIC_DisableIRQ (UART1_RX_TX_IRQn);
@@ -114,8 +111,7 @@ int32_t uart_reset (void)
     return 1;
 }
 
-int32_t uart_set_configuration (UART_Configuration *config)
-{
+int32_t uart_set_configuration (UART_Configuration *config) {
 
     uint8_t data_bits = 8;
     uint8_t parity_enable = 0;
@@ -134,7 +130,6 @@ int32_t uart_set_configuration (UART_Configuration *config)
     if ((config->DataBits < 8) || (config->DataBits > 9)) {
         data_bits = 8;
     }
-
     data_bits -= 8;
 
     if (config->Parity == 1) {
@@ -156,8 +151,8 @@ int32_t uart_set_configuration (UART_Configuration *config)
 
     // data bits, parity and parity mode
     UART1->C1 = data_bits << UART_C1_M_SHIFT
-                | parity_enable << UART_C1_PE_SHIFT
-                | parity_type << UART_C1_PT_SHIFT;
+              | parity_enable << UART_C1_PE_SHIFT
+              | parity_type << UART_C1_PT_SHIFT;
 
     dll =  SystemCoreClock / (16 * config->Baudrate);
 
@@ -175,20 +170,17 @@ int32_t uart_set_configuration (UART_Configuration *config)
     return 1;
 }
 
-int32_t uart_get_configuration (UART_Configuration *config)
-{
+int32_t uart_get_configuration (UART_Configuration *config) {
 
     return 1;
 }
 
-int32_t uart_write_free(void)
-{
+int32_t uart_write_free(void) {
 
     return BUFFER_SIZE - (write_buffer.cnt_in - write_buffer.cnt_out);
 }
 
-int32_t uart_write_data (uint8_t *data, uint16_t size)
-{
+int32_t uart_write_data (uint8_t *data, uint16_t size) {
     uint32_t cnt;
     int16_t  len_in_buf;
 
@@ -200,7 +192,6 @@ int32_t uart_write_data (uint8_t *data, uint16_t size)
 
     while (size--) {
         len_in_buf = write_buffer.cnt_in - write_buffer.cnt_out;
-
         if (len_in_buf < BUFFER_SIZE) {
             write_buffer.data[write_buffer.idx_in++] = *data++;
             write_buffer.idx_in &= (BUFFER_SIZE - 1);
@@ -209,7 +200,8 @@ int32_t uart_write_data (uint8_t *data, uint16_t size)
         }
     }
 
-    if (!tx_in_progress) {
+    if (!tx_in_progress)
+    {
         // Wait for D register to be free
         while(!(UART1->S1 & UART_S1_TDRE_MASK)) { }
 
@@ -227,8 +219,7 @@ int32_t uart_write_data (uint8_t *data, uint16_t size)
     return cnt;
 }
 
-int32_t uart_read_data (uint8_t *data, uint16_t size)
-{
+int32_t uart_read_data (uint8_t *data, uint16_t size) {
     uint32_t cnt;
 
     if (size == 0) {
@@ -243,7 +234,9 @@ int32_t uart_read_data (uint8_t *data, uint16_t size)
             read_buffer.idx_out &= (BUFFER_SIZE - 1);
             read_buffer.cnt_out++;
             cnt++;
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -251,8 +244,7 @@ int32_t uart_read_data (uint8_t *data, uint16_t size)
     return cnt;
 }
 
-void UART1_RX_TX_IRQHandler (void)
-{
+void UART1_RX_TX_IRQHandler (void) {
     uint32_t s1;
     volatile uint8_t errorData;
 
@@ -268,7 +260,8 @@ void UART1_RX_TX_IRQHandler (void)
             write_buffer.cnt_out++;
             tx_in_progress = 1;
         }
-    } else {
+    }
+    else {
         // disable TIE interrupt
         UART1->C2 &= ~(UART_C2_TIE_MASK);
         tx_in_progress = 0;
@@ -276,9 +269,12 @@ void UART1_RX_TX_IRQHandler (void)
 
     // handle received character
     if (s1 & UART_S1_RDRF_MASK) {
-        if ((s1 & UART_S1_NF_MASK) || (s1 & UART_S1_FE_MASK)) {
+        if ((s1 & UART_S1_NF_MASK) || (s1 & UART_S1_FE_MASK))
+        {
             errorData = UART1->D;
-        } else {
+        }
+        else
+        {
             read_buffer.data[read_buffer.idx_in++] = UART1->D;
             read_buffer.idx_in &= (BUFFER_SIZE - 1);
             read_buffer.cnt_in++;

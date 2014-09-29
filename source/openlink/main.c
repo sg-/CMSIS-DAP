@@ -88,65 +88,56 @@ USB_CONNECT usb_state;
 static USB_BUSY usb_busy;
 static uint32_t usb_busy_count;
 
-static U64 stk_timer_30_task[TIMER_TASK_30_STACK / 8];
-static U64 stk_dap_task[DAP_TASK_STACK / 8];
-static U64 stk_serial_task[SERIAL_TASK_STACK / 8];
-static U64 stk_main_task[MAIN_TASK_STACK / 8];
+static U64 stk_timer_30_task[TIMER_TASK_30_STACK/8];
+static U64 stk_dap_task[DAP_TASK_STACK/8];
+static U64 stk_serial_task[SERIAL_TASK_STACK/8];
+static U64 stk_main_task[MAIN_TASK_STACK/8];
 
 // Timer task, set flags every 30mS and 90mS
-__task void timer_task_30mS(void)
-{
+__task void timer_task_30mS(void) {
     uint8_t i = 0;
     os_itv_set(3); // 30mS
 
     while(1) {
         os_itv_wait();
         os_evt_set(FLAGS_MAIN_30MS, main_task_id);
-
-        if (!(i++ % 3)) {
+        if (!(i++ % 3))
             os_evt_set(FLAGS_MAIN_90MS, main_task_id);
-        }
     }
 }
 
 // Functions called from other tasks to trigger events in the main task
-void main_reset_target(uint8_t send_unique_id)
-{
+void main_reset_target(uint8_t send_unique_id) {
     if (send_unique_id) {
         send_uID = 1;
     }
-
     os_evt_set(FLAGS_MAIN_RESET, main_task_id);
     return;
 }
 
 // Flash DAP LED using 30mS tick
-void main_blink_dap_led(uint8_t permanent)
-{
-    dap_led_usb_activity = 1;
+void main_blink_dap_led(uint8_t permanent) {
+    dap_led_usb_activity=1;
     dap_led_state = (permanent) ? LED_FLASH_PERMANENT : LED_FLASH;
     return;
 }
 
 // Flash Serial LED using 30mS tick
-void main_blink_cdc_led(uint8_t permanent)
-{
-    cdc_led_usb_activity = 1;
+void main_blink_cdc_led(uint8_t permanent) {
+    cdc_led_usb_activity=1;
     cdc_led_state = (permanent) ? LED_FLASH_PERMANENT : LED_FLASH;
     return;
 }
 
 // Flash MSD LED using 30mS tick
-void main_blink_msd_led(uint8_t permanent)
-{
-    msd_led_usb_activity = 1;
+void main_blink_msd_led(uint8_t permanent) {
+    msd_led_usb_activity=1;
     msd_led_state = (permanent) ? LED_FLASH_PERMANENT : LED_FLASH;
     return;
 }
 
 // MSC data transfer in progress
-void main_usb_busy_event(void)
-{
+void main_usb_busy_event(void) {
     usb_busy_count = USB_BUSY_TIME;
     usb_busy = USB_ACTIVE;
     //os_evt_set(FLAGS_MAIN_USB_BUSY, main_task_id);
@@ -154,22 +145,19 @@ void main_usb_busy_event(void)
 }
 
 // A new binary has been flashed in the target
-void main_usb_disconnect_event(void)
-{
+void main_usb_disconnect_event(void) {
     os_evt_set(FLAGS_MAIN_USB_DISCONNECT, main_task_id);
     return;
 }
 
 // Power down the interface
-void main_powerdown_event(void)
-{
+void main_powerdown_event(void) {
     os_evt_set(FLAGS_MAIN_POWERDOWN, main_task_id);
     return;
 }
 
 // Disable debug on target
-void main_disable_debug_event(void)
-{
+void main_disable_debug_event(void) {
     os_evt_set(FLAGS_MAIN_DISABLEDEBUG, main_task_id);
     return;
 }
@@ -177,8 +165,7 @@ void main_disable_debug_event(void)
 #define SIZE_DATA (64)
 os_mbx_declare(serial_mailbox, 20);
 
-__task void serial_process()
-{
+__task void serial_process() {
     uint8_t data[SIZE_DATA];
     int32_t len_data = 0;
     void *msg;
@@ -187,69 +174,55 @@ __task void serial_process()
 
         // Check our mailbox to see if we need to set anything up with the UART
         // before we do any sending or receiving
-        if (os_mbx_wait(&serial_mailbox, &msg, 0) == OS_R_OK) {
-            switch((SERIAL_MSG)(unsigned)msg) {
+        if (os_mbx_wait(&serial_mailbox, &msg, 0) == OS_R_OK)
+        {
+            switch((SERIAL_MSG)(unsigned)msg)
+            {
                 case SERIAL_INITIALIZE:
                     uart_initialize();
                     break;
-
                 case SERIAL_UNINITIALIZE:
                     uart_uninitialize();
                     break;
-
                 case SERIAL_RESET:
                     uart_reset();
                     break;
-
-                case SERIAL_SET_CONFIGURATION: {
-                    UART_Configuration config;
-                    serial_get_configuration(&config);
-                    uart_set_configuration(&config);
-                }
-                break;
-
+                case SERIAL_SET_CONFIGURATION:
+                    {
+                        UART_Configuration config;
+                        serial_get_configuration(&config);
+                        uart_set_configuration(&config);
+                    }
+                    break;
                 default:
                     break;
             }
         }
 
         len_data = USBD_CDC_ACM_DataFree();
-
-        if (len_data > SIZE_DATA) {
+        if (len_data > SIZE_DATA)
             len_data = SIZE_DATA;
-        }
-
-        if (len_data) {
+        if (len_data)
             len_data = uart_read_data(data, len_data);
-        }
-
         if (len_data) {
-            if(USBD_CDC_ACM_DataSend(data , len_data)) {
+            if(USBD_CDC_ACM_DataSend(data , len_data))
                 main_blink_cdc_led(0);
-            }
         }
 
         len_data = uart_write_free();
-
-        if (len_data > SIZE_DATA) {
+        if (len_data > SIZE_DATA)
             len_data = SIZE_DATA;
-        }
-
-        if (len_data) {
+        if (len_data)
             len_data = USBD_CDC_ACM_DataRead(data, len_data);
-        }
-
         if (len_data) {
-            if (uart_write_data(data, len_data)) {
+            if (uart_write_data(data, len_data))
                 main_blink_cdc_led(0);
-            }
         }
     }
 }
 
 extern __task void hid_process(void);
-__task void main_task(void)
-{
+__task void main_task(void) {
     // State processing
     uint16_t flags;
 
@@ -268,7 +241,7 @@ __task void main_task(void)
     char button_activated;
 
     // string containing unique ID
-    uint8_t *id_str;
+    uint8_t * id_str;
 
     // Initialize our serial mailbox
     os_mbx_init(&serial_mailbox, sizeof(serial_mailbox));
@@ -315,12 +288,12 @@ __task void main_task(void)
 
     while(1) {
         os_evt_wait_or(   FLAGS_MAIN_RESET              // Put target in reset state
-                          | FLAGS_MAIN_90MS               // 90mS tick
-                          | FLAGS_MAIN_30MS               // 30mS tick
-                          | FLAGS_MAIN_POWERDOWN          // Power down interface
-                          | FLAGS_MAIN_DISABLEDEBUG       // Power down interface
-                          | FLAGS_MAIN_USB_DISCONNECT,    // Disable target debug
-                          NO_TIMEOUT);
+                        | FLAGS_MAIN_90MS               // 90mS tick
+                        | FLAGS_MAIN_30MS               // 30mS tick
+                        | FLAGS_MAIN_POWERDOWN          // Power down interface
+                        | FLAGS_MAIN_DISABLEDEBUG       // Power down interface
+                        | FLAGS_MAIN_USB_DISCONNECT,    // Disable target debug
+                        NO_TIMEOUT);
 
         // Find out what event happened
         flags = os_evt_get();
@@ -334,7 +307,6 @@ __task void main_task(void)
         if (flags & FLAGS_MAIN_RESET) {
             cdc_led_state = LED_OFF;
             gpio_set_cdc_led(0);
-
             //usbd_cdc_ser_flush();
             if (send_uID) {
                 // set the target in reset to not receive char on the serial port
@@ -345,7 +317,6 @@ __task void main_task(void)
                 USBD_CDC_ACM_DataSend(id_str, strlen((const char *)id_str));
                 send_uID = 0;
             }
-
             // Reset target
             target_set_state(RESET_RUN);
             cdc_led_state = LED_FLASH;
@@ -392,9 +363,8 @@ __task void main_task(void)
 
                 case USB_ACTIVE:
                     if (DECZERO(usb_busy_count) == 0) {
-                        usb_busy = USB_IDLE;
+                        usb_busy=USB_IDLE;
                     }
-
                     break;
 
                 case USB_IDLE:
@@ -406,37 +376,31 @@ __task void main_task(void)
             switch (usb_state) {
 
                 case USB_DISCONNECTING:
-
                     // Wait until USB is idle before disconnecting
                     if (usb_busy == USB_IDLE) {
                         usbd_connect(0);
                         usb_state = USB_DISCONNECTED;
                     }
-
                     break;
 
                 case USB_DISCONNECT_CONNECT:
-
                     // Wait until USB is idle before disconnecting
                     if ((usb_busy == USB_IDLE) && (DECZERO(usb_state_count) == 0)) {
                         usbd_connect(0);
                         usb_state = USB_CONNECTING;
                         // Update HTML file
                         //update_html_file();
-                        // Delay the connecting state before reconnecting to the host - improved usage with VMs
-                        usb_state_count = 10; //(90ms * 10 = 900ms)
+						// Delay the connecting state before reconnecting to the host - improved usage with VMs
+						usb_state_count = 10; //(90ms * 10 = 900ms)
                     }
-
                     break;
 
                 case USB_CONNECTING:
-
                     // Wait before connecting
                     if (DECZERO(usb_state_count) == 0) {
                         usbd_connect(1);
                         usb_state = USB_CHECK_CONNECTED;
                     }
-
                     break;
 
                 case USB_CHECK_CONNECTED:
@@ -446,10 +410,8 @@ __task void main_task(void)
                             serial_task_id = os_tsk_create_user(serial_process, SERIAL_TASK_PRIORITY, (void *)stk_serial_task, SERIAL_TASK_STACK);
                             thread_started = 1;
                         }
-
                         usb_state = USB_CONNECTED;
                     }
-
                     break;
 
                 case USB_CONNECTED:
@@ -457,7 +419,7 @@ __task void main_task(void)
                 default:
                     break;
             }
-        }
+         }
 
         // 30mS tick used for flashing LED when USB is busy
         if (flags & FLAGS_MAIN_30MS) {
@@ -467,7 +429,6 @@ __task void main_task(void)
                     dap_led_value = 0;
                 } else {
                     dap_led_value = 1; // Turn on
-
                     if (dap_led_state == LED_FLASH) {
                         dap_led_usb_activity = 0;
                     }
@@ -483,7 +444,6 @@ __task void main_task(void)
                     msd_led_value = 0;
                 } else {
                     msd_led_value = 1; // Turn on
-
                     if (msd_led_state == LED_FLASH) {
                         msd_led_usb_activity = 0;
                     }
@@ -499,7 +459,6 @@ __task void main_task(void)
                     cdc_led_value = 0;
                 } else {
                     cdc_led_value = 1; // Turn on
-
                     if (cdc_led_state == LED_FLASH) {
                         cdc_led_usb_activity = 0;
                     }
@@ -514,7 +473,6 @@ __task void main_task(void)
 }
 
 // Main Program
-int main (void)
-{
-    os_sys_init_user(main_task, MAIN_TASK_PRIORITY, stk_main_task, MAIN_TASK_STACK);
+int main (void) {
+  os_sys_init_user(main_task, MAIN_TASK_PRIORITY, stk_main_task, MAIN_TASK_STACK);
 }

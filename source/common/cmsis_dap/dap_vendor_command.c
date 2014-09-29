@@ -30,12 +30,11 @@
 //   response: pointer to response data
 //   return:   number of bytes in response
 // this function is declared as __weak in DAP.c
-uint32_t DAP_ProcessVendorCommand(uint8_t *request, uint8_t *response)
-{
+uint32_t DAP_ProcessVendorCommand(uint8_t *request, uint8_t *response) {
 
     // get unique ID command
     if (*request == ID_DAP_Vendor0) {
-        uint8_t *id_str = get_uid_string();
+        uint8_t * id_str = get_uid_string();
         uint8_t len = strlen((const char *)(id_str + 4));
         *response = ID_DAP_Vendor0;
         *(response + 1) = len;
@@ -47,6 +46,5 @@ uint32_t DAP_ProcessVendorCommand(uint8_t *request, uint8_t *response)
     else {
         *response = ID_DAP_Invalid;
     }
-
     return (1);
 }

@@ -23,26 +23,26 @@ UART_Configuration uart_config;
 
 int32_t serial_initialize(void)
 {
-    os_mbx_send(&serial_mailbox, (void *)SERIAL_INITIALIZE, 0);
+    os_mbx_send(&serial_mailbox, (void*)SERIAL_INITIALIZE, 0);
     return 1;
 }
 
 int32_t serial_uninitialize(void)
 {
-    os_mbx_send(&serial_mailbox, (void *)SERIAL_UNINITIALIZE, 0);
+    os_mbx_send(&serial_mailbox, (void*)SERIAL_UNINITIALIZE, 0);
     return 1;
 }
 
 int32_t serial_reset(void)
 {
-    os_mbx_send(&serial_mailbox, (void *)SERIAL_RESET, 0);
+    os_mbx_send(&serial_mailbox, (void*)SERIAL_RESET, 0);
     return 1;
 }
 
 int32_t serial_set_configuration(UART_Configuration *config)
 {
     uart_config = *config;
-    os_mbx_send(&serial_mailbox, (void *)SERIAL_SET_CONFIGURATION, 0);
+    os_mbx_send(&serial_mailbox, (void*)SERIAL_SET_CONFIGURATION, 0);
     return 1;
 }
 
