@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "read_uid.h"
+#include "target_reset.h"
+#include "swd_host.h"
 
-#define IAP_LOCATION 0x1fff1ff1
-static uint32_t command[5];
-static uint32_t result[5];
-typedef void (*IAP)(uint32_t[], uint32_t[]);
-static IAP iap_entry;
+void target_before_init_debug(void) {
+    return;
+}
 
+uint8_t target_unlock_sequence(void) {
+    return 1;
+}
 
-void read_unique_id(uint32_t * id) {
-    // readUID IAP call
-    iap_entry = (IAP) IAP_LOCATION;
-    command[0] = 58;
-    iap_entry (command, result);
-    *id = result[1] ^ result[2] ^ result[3] ^ result[4];
+uint8_t target_set_state(TARGET_RESET_STATE state) {
+    return swd_set_target_state(state);
 }
