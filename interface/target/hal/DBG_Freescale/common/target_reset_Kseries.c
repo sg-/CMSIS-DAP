@@ -131,4 +131,5 @@ uint32_t get_target_uuid(uint8_t* data, uint32_t size)
         data[2] = (uint8_t) (tmp>>16) & 0xff;
         data[3] = (uint8_t) (tmp>>24) & 0xff;
     }
+    return 1;
 }

@@ -35,7 +35,7 @@ static uint8_t already_unique_id = 0;
 static uint32_t auth;
 uint8_t string_auth[25 + 4];
 uint8_t string_auth_descriptor[2+25*2];
-static const char nybble_chars[] = "0123456789ABCDEF";
+static const char nybble_chars[] = "0123456789abcdef";
 
 static void setup_string_id_auth(void);
 
