@@ -17,7 +17,7 @@
 #ifndef VALIDATE_APPLICATION_H
 #define VALIDATE_APPLICATION_H
 
-#include <stdint.h>
+#include "stdint.h"
 
 /**
  @addtogroup

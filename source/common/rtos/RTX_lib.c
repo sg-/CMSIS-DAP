@@ -338,7 +338,7 @@ void rt_init (void) {
 }
 
 
-#include <RT_Agent.c>
+#include "RT_Agent.c"
 
 #endif /* #if (__ARM__ && __RTA_RTX_CONFIG) */
                                               

@@ -22,7 +22,7 @@
 #include "RTL.h"
 #include "rl_usb.h"
 
-#include <string.h>
+#include "string.h"
 
 //#include "target_flash.h"
 //#include "target_reset.h"

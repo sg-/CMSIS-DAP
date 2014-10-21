@@ -17,7 +17,7 @@
 #include "mbed_htm.h"
 #include "read_uid.h"
 #include "firmware_cfg.h"
-#include <string.h>
+#include "string.h"
 
 // Pointers to substitution strings
 static char const *fw_version = (const char *)FW_BUILD;

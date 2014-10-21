@@ -18,7 +18,7 @@
 #define VIRTUAL_FS_H
 
 #include "firmware_cfg.h"
-#include <stdint.h>
+#include "stdint.h"
 
 /**
  @addtogroup

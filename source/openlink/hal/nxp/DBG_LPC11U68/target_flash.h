@@ -18,7 +18,7 @@
 
 #include "target_struct.h"
 #include "swd_host.h"
-#include <stdint.h>
+#include "stdint.h"
 
 #define FLASH_SECTOR_SIZE           (1024)  /* 1024 is assuming that this value is in number of uint32_t's */
 

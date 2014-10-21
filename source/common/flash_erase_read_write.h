@@ -17,7 +17,7 @@
 #ifndef FLASH_ERASE_READ_WRITE_H
 #define FLASH_ERASE_READ_WRITE_H
 
-#include <stdint.h>
+#include "stdint.h"
 
 // dnd prefix is drag-n-drop. These handlers are called during USB MSC writes
 

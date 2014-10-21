@@ -17,7 +17,7 @@
 #ifndef FIRMWARE_CFG_H
 #define FIRMWARE_CFG_H
 
-#include <stdint.h>
+#include "stdint.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,7 +16,7 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-#include <stdint.h>
+#include "stdint.h"
 
 // This file is common between bootloader and OpenLINK
 
