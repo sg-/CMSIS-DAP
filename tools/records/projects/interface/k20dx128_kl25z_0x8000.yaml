@@ -3,7 +3,7 @@ name:
 common:
     include_paths:
         - source/common/cmsis_core/hal/freescale/mk20dx128
-        - source/common/cmsis_dap/hal/freescale
+        - source/common/cmsis_dap/hal/freescale/mk20dx128
         - source/openlink/hal/freescale/DBG_KL25Z
     source_files:
         - source/common/cmsis_core/hal/freescale/mk20dx128/system_MK20D5.c
