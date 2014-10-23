@@ -37,3 +37,16 @@ tool_specific:
                     - --c99
                 Optim:
                     - 0
+            Aads:
+                Define:
+                    - OFFSET_VTABLE_32K
+            TargetOption:
+                AfterMake:
+                    RunUserProg1:
+                        - enable
+                    UserProg1Name:
+                        - fromelf --m32combined -o "$L@L.S19" "#L"
+                    RunUserProg2:
+                        - enable
+                    UserProg2Name:
+                        - fromelf --bin -o "$L@L.bin" "#L"

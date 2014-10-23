@@ -456,12 +456,12 @@ FOPT            EQU     0xFD
 FSEC            EQU     0xFE
 ;   </h>
 ; </h>
-                IF      :LNOT::DEF:RAM_TARGET
-                AREA    |.ARM.__at_0x400 |, CODE, READONLY
-                ELIF    :DEF:APP_OFFSET_20K
+                IF      :DEF:APP_OFFSET_20K
                 AREA    |.ARM.__at_0x5400|, CODE, READONLY               
                 ELIF    :DEF:APP_OFFSET_32K
                 AREA    |.ARM.__at_0x8400|, CODE, READONLY
+                ELIF    :LNOT::DEF:RAM_TARGET
+                AREA    |.ARM.__at_0x400 |, CODE, READONLY                    
                 ENDIF
                 DCB     BackDoorK0, BackDoorK1, BackDoorK2, BackDoorK3
                 DCB     BackDoorK4, BackDoorK5, BackDoorK6, BackDoorK7
