@@ -30,7 +30,7 @@ const unsigned char WebSide[] = {
 "<!-- Version: " FW_BUILD " Build: " __DATE__ " " __TIME__ " Git Commit SHA: "  GIT_COMMIT_SHA " Git local mods:" GIT_LOCAL_MODS_STR"-->\r\n"
 "<html>\r\n"
 "<head>\r\n"
-"<meta http-equiv=\"refresh\" content=\"0; url=http://mbed.org/device/?code=@A\"/>\r\n"
+"<meta http-equiv=\"refresh\" content=\"0; url=http://mbed.org/device/?code=@A&UUID=@U\"/>\r\n"
 "<title>mbed Website Shortcut</title>\r\n"
 "</head>\r\n"
 "<body></body>\r\n"

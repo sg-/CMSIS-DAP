@@ -23,6 +23,10 @@
 
 extern uint8_t usb_buffer[];
 
+// hack-ish way to get uuid
+extern uint32_t uuid_data[4];
+uint8_t uuid_string[33] = {0};
+
 // Pointers to substitution strings
 const char *fw_version = (const char *)FW_BUILD;
 
@@ -38,6 +42,22 @@ static void setup_string_id_auth(void);
 static void get_byte_hex( uint8_t b, uint8_t *ch1, uint8_t *ch2 ) {
     *ch1 = nybble_chars[ ( b >> 4 ) & 0x0F ];
     *ch2 = nybble_chars[ b & 0x0F ];
+}
+
+static void build_uuid_string()
+{
+    int i=0, j=0, k=0;
+    uint8_t b = 0;
+    
+    for (; j<32; j+=8) {    
+        for (; i<4; i++) {
+            b = uuid_data[k] >> (24-(i*8));
+            get_byte_hex(b, &uuid_string[j+2*i], &uuid_string[j+2*i+1]);
+        }
+        i = 0;
+        k++;
+    }
+    uuid_string[32] = '\0';
 }
 
 static uint32_t atoi(uint8_t * str, uint8_t size, uint8_t base) {
@@ -174,7 +194,9 @@ static uint8_t get_html_character(HTMLCTX *h) {
                         break;
 
                     // Add any additional substitutions here
-
+                    case 'U':
+                        h->substitute = 1;
+                        sptr = (uint8_t *)(uuid_string);    // target UUID
                     default:
                         break;
                 }
@@ -220,6 +242,7 @@ uint8_t update_html_file(void) {
         compute_auth();
         setup_string_id_auth();
         setup_string_descriptor();
+        build_uuid_string();
         already_unique_id = 1;
     }
 

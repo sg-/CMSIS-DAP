@@ -38,6 +38,8 @@
 #include "read_uid.h"
 #endif
 
+uint32_t uuid_data[4] = {0};
+
 #if defined(BOARD_LPC1549) || defined(BOARD_LPC11U68) || defined(BOARD_LPC4337)
     #define USE_USB_EJECT_INSERT
 #endif
@@ -257,6 +259,10 @@ __task void serial_process() {
     }
 }
 
+#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+extern void pre_run_config(void);
+#endif
+
 extern __task void hid_process(void);
 __task void main_task(void) {
     // State processing
@@ -278,6 +284,12 @@ __task void main_task(void) {
 
     // string containing unique ID
     uint8_t * id_str;
+    
+#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+#warning Building for FRDM board.
+    pre_run_config();
+#else
+#endif
 
     // Initialize our serial mailbox
     os_mbx_init(&serial_mailbox, sizeof(serial_mailbox));
@@ -286,11 +298,11 @@ __task void main_task(void) {
     main_task_id = os_tsk_self();
 
     // leds
-    gpio_init();
-    // Turn off LED
-    gpio_set_dap_led(1);
-    gpio_set_cdc_led(1);
-    gpio_set_msd_led(1);
+//    gpio_init();
+//    // Turn off LED
+//    gpio_set_dap_led(1);
+//    gpio_set_cdc_led(1);
+//    gpio_set_msd_led(1);
 
 #ifdef BOARD_UBLOX_C027
     PORT_SWD_SETUP();
@@ -306,7 +318,7 @@ __task void main_task(void) {
 #endif 
 
     usbd_init();
-    swd_init();
+//    swd_init();
 
     // Setup reset button
     gpio_enable_button_flag(main_task_id, FLAGS_MAIN_RESET);
@@ -335,8 +347,8 @@ __task void main_task(void) {
     target_set_state(RESET_RUN);
 #endif
     // start semihost task
-    semihost_init();
-    semihost_enable();
+    //semihost_init();
+    //semihost_enable();
 
     while(1) {
         os_evt_wait_or(   FLAGS_MAIN_RESET              // Put target in reset state
@@ -382,6 +394,7 @@ __task void main_task(void) {
                 send_uID = 0;
             }
             // Reset target
+            target_set_state(NO_DEBUG); //TESTING for IAR
             target_set_state(RESET_RUN);
             cdc_led_state = LED_FLASH;
             gpio_set_cdc_led(1);
@@ -556,9 +569,30 @@ __task void main_task(void) {
 }
 
 // Main Program
-int main (void) {
-  /* Allow the board to do some last initialization before the main task is started */
-  board_init();
-
-  os_sys_init_user(main_task, MAIN_TASK_PRIORITY, stk_main_task, MAIN_TASK_STACK);
+int main (void) 
+{
+    /* Allow the board to do some last initialization before the main task is started */
+    board_init();
+    
+    // TEST target known config
+    gpio_init();
+    // Turn off LED
+    gpio_set_dap_led(0);
+    gpio_set_cdc_led(0);
+    gpio_set_msd_led(0);
+    // config swd pins
+    swd_init();
+    
+//#if defined(DBG_KL05Z) || defined(DBG_KL25Z) || defined(DBG_KL46Z) || defined(DBG_K64F) || defined(DBG_K22F) || defined(DBG_K20D50M)
+//    pre_run_config();
+//#else
+//#warning Not building for FRDM board
+//#endif
+    
+    // Turn off LED
+    gpio_set_dap_led(1);
+    gpio_set_cdc_led(1);
+    gpio_set_msd_led(1);
+    // original task to start USB
+    os_sys_init_user(main_task, MAIN_TASK_PRIORITY, stk_main_task, MAIN_TASK_STACK);
 }

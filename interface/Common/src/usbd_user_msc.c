@@ -1256,7 +1256,11 @@ void usbd_msc_write_sect (uint32_t block, uint8_t *buf, uint32_t num_of_blocks) 
             
             // not consecutive sectors detected
             if ((flash_started == 1) && (maybe_erase == 0) && (start_sector != block) && (block != (start_sector + current_sector))) {
-                reason = NOT_CONSECUTIVE_SECTORS;
+                //TODO: Patch to validate binary before erasing target.
+                // maybe did something else for mac or linux or tmp file transfer but really we need to 
+                // validate the incoming image before erasing and starting to program. Otherwise, no dice
+                //reason = NOT_CONSECUTIVE_SECTORS;
+                reason = INVALID_BINARY_NVIC;
                 initDisconnect(0);
                 return;
             }

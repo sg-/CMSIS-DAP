@@ -76,12 +76,12 @@ INTERFACE_PROJECTS = [
             'path' : r'interface\mdk\lpc11u35\lpc11u35_interface.uvproj',
             'targets' : [
                             'lpc11u35_lpc812_if',
-                            'lpc11u35_lpc812_mbed_bootloader',
+                            #'lpc11u35_lpc812_mbed_bootloader',
                             'lpc11u35_lpc1768_if',
-                            'lpc11u35_lpc1768_mbed_bootloader',
+                            #'lpc11u35_lpc1768_mbed_bootloader',
                             'lpc11u35_ublox_lpc1768_if',
                             'lpc11u35_lpc1114_if',
-                            'lpc11u35_lpc1114_mbed_bootloader',
+                            #'lpc11u35_lpc1114_mbed_bootloader',
                             #'lpc11u35_lpc810_if' # fails build
                          ],
         },

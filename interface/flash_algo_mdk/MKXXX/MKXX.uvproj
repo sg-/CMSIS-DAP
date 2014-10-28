@@ -51,7 +51,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MK20DX128\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -128,7 +128,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -140,8 +139,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -344,7 +341,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -356,8 +353,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>2</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MK20DX128VLH5, __NO_EMBEDDED_ASM</Define>
@@ -374,7 +369,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -391,7 +385,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -409,6 +402,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -461,8 +459,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -587,7 +583,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MK64FN1M0\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -664,7 +660,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -676,8 +671,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -880,7 +873,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -892,8 +885,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>2</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MK64FN1M0VMD12, __NO_EMBEDDED_ASM</Define>
@@ -910,7 +901,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -927,7 +917,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -945,6 +934,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -997,8 +991,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -1123,7 +1115,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MKL02Z32\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -1200,7 +1192,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -1212,8 +1203,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>0</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -1416,7 +1405,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -1428,8 +1417,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>2</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MKL02Z32VFM4, __NO_EMBEDDED_ASM</Define>
@@ -1446,7 +1433,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -1463,7 +1449,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -1481,6 +1466,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1528,8 +1518,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -1659,7 +1647,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MKL05Z32\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -1736,7 +1724,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -1748,8 +1735,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -1952,7 +1937,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -1964,8 +1949,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>2</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MKL05Z32VLF4, __NO_EMBEDDED_ASM</Define>
@@ -1982,7 +1965,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -1999,7 +1981,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -2017,6 +1998,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2064,8 +2050,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -2195,7 +2179,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MKL25Z128\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -2272,7 +2256,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -2284,8 +2267,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -2488,7 +2469,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -2500,8 +2481,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>2</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MKL25Z128VLK4, __NO_EMBEDDED_ASM</Define>
@@ -2518,7 +2497,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -2535,7 +2513,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -2553,6 +2530,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2600,8 +2582,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -2731,7 +2711,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MKL26Z128\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -2808,7 +2788,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -2820,8 +2799,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -3024,7 +3001,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -3036,8 +3013,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>2</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MKL25Z128VLK4, __NO_EMBEDDED_ASM</Define>
@@ -3054,7 +3029,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -3071,7 +3045,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -3089,6 +3062,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3136,8 +3114,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -3267,7 +3243,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MKL46Z256\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -3344,7 +3320,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -3356,8 +3331,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -3560,7 +3533,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -3572,8 +3545,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>2</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MKL46Z256VMC4, __NO_EMBEDDED_ASM</Define>
@@ -3590,7 +3561,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -3607,7 +3577,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -3625,6 +3594,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3672,8 +3646,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>
@@ -3803,7 +3775,7 @@
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\Output\</ListingPath>
+          <ListingPath>.\Output\MK22F51212\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -3880,7 +3852,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
@@ -3892,8 +3863,6 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>0</TargetSelection>
@@ -4096,7 +4065,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>0</interw>
-            <Optim>0</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -4108,8 +4077,6 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>1</uC99>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--diag_suppress=1 --gnu --c99</MiscControls>
               <Define>CPU_MK22FN512VLL12, __NO_EMBEDDED_ASM</Define>
@@ -4126,7 +4093,6 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
-            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -4143,7 +4109,6 @@
             <useFile>0</useFile>
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
-            <pXoBase></pXoBase>
             <ScatterFile>.\Target.lin</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -4161,6 +4126,11 @@
               <FileName>flash_algo.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\flash_algo.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FlashDev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4213,8 +4183,6 @@
                     <wLevel>0</wLevel>
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
                     <VariousControls>
                       <MiscControls></MiscControls>
                       <Define></Define>

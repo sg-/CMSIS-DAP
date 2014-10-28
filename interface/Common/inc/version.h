@@ -18,10 +18,13 @@
 
 #include <stdint.h>
 
+//#define FW_BUILD "1204"
 #ifdef TARGET_ATSAM3U2C
 #define FW_BUILD "0217"
 #else 
-#define FW_BUILD "0203"
+#define FW_BUILD "0204"
+// used for beta on development branches
+//#define FW_BUILD "ff02"
 #endif
 
 
