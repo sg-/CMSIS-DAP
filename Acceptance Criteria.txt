@@ -22,6 +22,6 @@ The test(s) validates the following functionallities:
   * Internet Explorer - latest
   * Firefox - latest
   * Safari - latest (Mac only)
-  * cp, copy, xcopy, mv commands (based on OS compatibility)
+  * cp, copy, xcopy, mv commands (based on OS compatibility) 
 
 
