@@ -25,7 +25,7 @@
 #include "gpio.h"
 #include "uart.h"
 #include "semihost.h"
-#include "serial.h"
+//#include "serial.h"
 #include "tasks.h"
 
 #include "target_reset.h"
@@ -41,7 +41,7 @@
 #include "read_uid.h"
 #endif
 
-#define USE_USB_EJECT_INSERT
+//#define USE_USB_EJECT_INSERT
 
 #if defined(BOARD_LPC1549) || defined(BOARD_LPC11U68) || defined(BOARD_LPC4337)
     #define USE_USB_EJECT_INSERT
@@ -124,7 +124,7 @@ static uint32_t usb_busy_count;
 
 static U64 stk_timer_30_task[TIMER_TASK_30_STACK/8];
 static U64 stk_dap_task[DAP_TASK_STACK/8];
-static U64 stk_serial_task[SERIAL_TASK_STACK/8];
+//static U64 stk_serial_task[SERIAL_TASK_STACK/8];
 static U64 stk_main_task[MAIN_TASK_STACK/8];
 
 // Timer task, set flags every 30mS and 90mS
@@ -210,62 +210,62 @@ void main_disable_debug_event(void) {
 
 #endif
 
-os_mbx_declare(serial_mailbox, 20);
-static uint8_t data[SIZE_DATA];
-__task void serial_process() {
-    int32_t len_data = 0;
-    void *msg;
+//os_mbx_declare(serial_mailbox, 20);
+//static uint8_t data[SIZE_DATA];
+//__task void serial_process() {
+//    int32_t len_data = 0;
+//    void *msg;
 
-    while (1) {
+//    while (1) {
 
-        // Check our mailbox to see if we need to set anything up with the UART
-        // before we do any sending or receiving
-        if (os_mbx_wait(&serial_mailbox, &msg, 0) == OS_R_OK)
-        {
-            switch((SERIAL_MSG)(unsigned)msg)
-            {
-                case SERIAL_INITIALIZE:
-                    uart_initialize();
-                    break;
-                case SERIAL_UNINITIALIZE:
-                    uart_uninitialize();
-                    break;
-                case SERIAL_RESET:
-                    uart_reset();
-                    break;
-                case SERIAL_SET_CONFIGURATION:
-                    {
-                        UART_Configuration config;
-                        serial_get_configuration(&config);
-                        uart_set_configuration(&config);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+//        // Check our mailbox to see if we need to set anything up with the UART
+//        // before we do any sending or receiving
+//        if (os_mbx_wait(&serial_mailbox, &msg, 0) == OS_R_OK)
+//        {
+//            switch((SERIAL_MSG)(unsigned)msg)
+//            {
+//                case SERIAL_INITIALIZE:
+//                    uart_initialize();
+//                    break;
+//                case SERIAL_UNINITIALIZE:
+//                    uart_uninitialize();
+//                    break;
+//                case SERIAL_RESET:
+//                    uart_reset();
+//                    break;
+//                case SERIAL_SET_CONFIGURATION:
+//                    {
+//                        UART_Configuration config;
+//                        serial_get_configuration(&config);
+//                        uart_set_configuration(&config);
+//                    }
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
 
-        len_data = USBD_CDC_ACM_DataFree();
-        if (len_data > SIZE_DATA)
-            len_data = SIZE_DATA;
-        if (len_data)
-            len_data = uart_read_data(data, len_data);
-        if (len_data) {
-            if(USBD_CDC_ACM_DataSend(data , len_data))
-                main_blink_cdc_led(0);
-        }
+//        len_data = USBD_CDC_ACM_DataFree();
+//        if (len_data > SIZE_DATA)
+//            len_data = SIZE_DATA;
+//        if (len_data)
+//            len_data = uart_read_data(data, len_data);
+//        if (len_data) {
+//            if(USBD_CDC_ACM_DataSend(data , len_data))
+//                main_blink_cdc_led(0);
+//        }
 
-        len_data = uart_write_free();
-        if (len_data > SIZE_DATA)
-            len_data = SIZE_DATA;
-        if (len_data)
-            len_data = USBD_CDC_ACM_DataRead(data, len_data);
-        if (len_data) {
-            if (uart_write_data(data, len_data))
-                main_blink_cdc_led(0);
-        }
-    }
-}
+//        len_data = uart_write_free();
+//        if (len_data > SIZE_DATA)
+//            len_data = SIZE_DATA;
+//        if (len_data)
+//            len_data = USBD_CDC_ACM_DataRead(data, len_data);
+//        if (len_data) {
+//            if (uart_write_data(data, len_data))
+//                main_blink_cdc_led(0);
+//        }
+//    }
+//}
 
 extern __task void hid_process(void);
 __task void main_task(void) {
@@ -289,8 +289,8 @@ __task void main_task(void) {
     // string containing unique ID
     uint8_t * id_str;
 
-    // Initialize our serial mailbox
-    os_mbx_init(&serial_mailbox, sizeof(serial_mailbox));
+//    // Initialize our serial mailbox
+//    os_mbx_init(&serial_mailbox, sizeof(serial_mailbox));
 
     // Get a reference to this task
     main_task_id = os_tsk_self();
@@ -319,7 +319,7 @@ __task void main_task(void) {
     swd_init();
 
     // Setup reset button
-    gpio_enable_button_flag(main_task_id, FLAGS_MAIN_RESET);
+    //gpio_enable_button_flag(main_task_id, FLAGS_MAIN_RESET);
     button_activated = 1;
     
     // Update HTML version information file
@@ -385,15 +385,15 @@ __task void main_task(void) {
             cdc_led_state = LED_OFF;
             gpio_set_cdc_led(0);
             //usbd_cdc_ser_flush();
-            if (send_uID) {
-                // set the target in reset to not receive char on the serial port
-                target_set_state(RESET_HOLD);
+//            if (send_uID) {
+//                // set the target in reset to not receive char on the serial port
+//                target_set_state(RESET_HOLD);
 
-                // send uid
-                id_str = get_uid_string();
-                USBD_CDC_ACM_DataSend(id_str, strlen((const char *)id_str));
-                send_uID = 0;
-            }
+//                // send uid
+//                id_str = get_uid_string();
+//                USBD_CDC_ACM_DataSend(id_str, strlen((const char *)id_str));
+//                send_uID = 0;
+//            }
             // Reset target
             target_set_state(RESET_RUN);
             cdc_led_state = LED_FLASH;
@@ -430,7 +430,7 @@ __task void main_task(void) {
 
         if (flags & FLAGS_MAIN_90MS) {
             if (!button_activated) {
-                gpio_enable_button_flag(main_task_id, FLAGS_MAIN_RESET);
+                //gpio_enable_button_flag(main_task_id, FLAGS_MAIN_RESET);
                 button_activated = 1;
             }
 
@@ -503,7 +503,7 @@ __task void main_task(void) {
                     if(usbd_configured()) {
                         if (!thread_started) {
                             os_tsk_create_user(hid_process, DAP_TASK_PRIORITY, (void *)stk_dap_task, DAP_TASK_STACK);
-                            serial_task_id = os_tsk_create_user(serial_process, SERIAL_TASK_PRIORITY, (void *)stk_serial_task, SERIAL_TASK_STACK);
+                            //serial_task_id = os_tsk_create_user(serial_process, SERIAL_TASK_PRIORITY, (void *)stk_serial_task, SERIAL_TASK_STACK);
                             thread_started = 1;
                         }
                         usb_state = USB_CONNECTED;

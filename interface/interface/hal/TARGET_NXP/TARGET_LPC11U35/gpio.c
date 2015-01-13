@@ -56,13 +56,13 @@ void gpio_init(void) {
     LPC_GPIO->DIR[0]  |= (PIN_CDC_LED);
     LPC_GPIO->CLR[0]  |= (PIN_CDC_LED);
 
-    // configure Button as input
-#if SW_RESET_BUTTON
-    LPC_GPIO->DIR[RESET_PORT]  &= ~(1 << RESET_PIN);
-#endif
+//    // configure Button as input
+//#if SW_RESET_BUTTON
+//    LPC_GPIO->DIR[RESET_PORT]  &= ~(1 << RESET_PIN);
+//#endif
 
-    /* Enable AHB clock to the FlexInt, GroupedInt domain. */
-    LPC_SYSCON->SYSAHBCLKCTRL |= ((1<<19) | (1<<23) | (1<<24));
+//    /* Enable AHB clock to the FlexInt, GroupedInt domain. */
+//    LPC_SYSCON->SYSAHBCLKCTRL |= ((1<<19) | (1<<23) | (1<<24));
 }
 
 void gpio_set_dap_led(uint8_t state) {
@@ -89,31 +89,31 @@ void gpio_set_msd_led(uint8_t state) {
     }
 }
 
-void gpio_enable_button_flag(OS_TID task, uint16_t flags) {
-    /* When the "reset" button is pressed the ISR will set the */
-    /* event flags "flags" for task "task" */
+//void gpio_enable_button_flag(OS_TID task, uint16_t flags) {
+//    /* When the "reset" button is pressed the ISR will set the */
+//    /* event flags "flags" for task "task" */
 
-    /* Keep a local copy of task & flags */
-    isr_notify=task;
-    isr_flags=flags;
+//    /* Keep a local copy of task & flags */
+//    isr_notify=task;
+//    isr_flags=flags;
 
-#if SW_RESET_BUTTON
-    LPC_SYSCON->STARTERP0 |= RESET_INT_MASK;
-    LPC_SYSCON->PINTSEL[RESET_INT_CH] = (RESET_PORT) ? (RESET_PIN + 24) : (RESET_PIN);
+//#if SW_RESET_BUTTON
+//    LPC_SYSCON->STARTERP0 |= RESET_INT_MASK;
+//    LPC_SYSCON->PINTSEL[RESET_INT_CH] = (RESET_PORT) ? (RESET_PIN + 24) : (RESET_PIN);
 
-    if (!(LPC_GPIO_PIN_INT->ISEL & RESET_INT_MASK))
-        LPC_GPIO_PIN_INT->IST = RESET_INT_MASK;
+//    if (!(LPC_GPIO_PIN_INT->ISEL & RESET_INT_MASK))
+//        LPC_GPIO_PIN_INT->IST = RESET_INT_MASK;
 
-    LPC_GPIO_PIN_INT->IENF |= RESET_INT_MASK;
+//    LPC_GPIO_PIN_INT->IENF |= RESET_INT_MASK;
 
-    NVIC_EnableIRQ(FLEX_INT0_IRQn);
-#endif
-}
+//    NVIC_EnableIRQ(FLEX_INT0_IRQn);
+//#endif
+//}
 
-void FLEX_INT0_IRQHandler() {
-    isr_evt_set(isr_flags, isr_notify);
-    NVIC_DisableIRQ(FLEX_INT0_IRQn);
+//void FLEX_INT0_IRQHandler() {
+//    isr_evt_set(isr_flags, isr_notify);
+//    NVIC_DisableIRQ(FLEX_INT0_IRQn);
 
-    // ack interrupt
-    LPC_GPIO_PIN_INT->IST = 0x01;
-}
+//    // ack interrupt
+//    LPC_GPIO_PIN_INT->IST = 0x01;
+//}

@@ -91,7 +91,7 @@ Provides definitions about:
 /// This configuration settings is used to optimized the communication performance with the
 /// debugger and depends on the USB peripheral. For devices with limited RAM or USB buffer the
 /// setting can be reduced (valid range is 1 .. 255). Change setting to 4 for High-Speed USB.
-#define DAP_PACKET_COUNT        1              ///< Buffers: 64 = Full-Speed, 4 = High-Speed.
+#define DAP_PACKET_COUNT        8              ///< Buffers: 64 = Full-Speed, 4 = High-Speed.
 
 /// Debug Unit is connected to fixed Target Device.
 /// The Debug Unit may be part of an evaluation board and always connected to a fixed
