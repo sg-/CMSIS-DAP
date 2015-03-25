@@ -13,12 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef TARGET_CONFIG_H
-#define TARGET_CONFIG_H
 
-#define FLASH_SECTOR_SIZE           (1024)
+#include "target_config.h"
 
-#define TARGET_AUTO_INCREMENT_PAGE_SIZE    (0x400)
-
-
-#endif
+// frdm-k64f target information
+const target_cfg_t target_device = {
+    .board_id   = "0000",
+    .secret     = "xxxxxxxx",
+    .sector_size    = 2048,
+    // Assume memory is regions are same size. Flash algo should ignore requests
+    //  when variable sized sectors exist
+    // .sector_cnt = ((.flash_end - .flash_start) / .sector_size);
+    .sector_cnt     = (kB(512)/2048),
+    .flash_start    = 0,
+    .flash_end      = kB(512),
+    .ram_start      = 0x1FFF0000,
+    .ram_end        = 0x20010000,
+    .disc_size      = kB(512)
+};
