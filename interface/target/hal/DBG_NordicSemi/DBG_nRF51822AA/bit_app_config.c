@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef VERSION_H
-#define VERSION_H
 
-#include "stdint.h"
+#include "target_config.h"
 
-// built for bootloader 1xxx
-//#define FW_BUILD "1203"
-// build for bootloader 0xxx
-#define FW_BUILD "0224"
-
-void update_html_file(uint8_t *buf, uint32_t bufsize);
-uint8_t * get_uid_string          (void);
-uint8_t   get_len_string_interface(void);
-uint8_t * get_uid_string_interface(void);
-void      init_auth_config        (void);
-void build_mac_string(uint32_t *uuid_data);
-
-#endif
+// nrf51822-mkit target information
+const target_cfg_t target_device = {
+    .board_id   = "1070",
+    .secret     = "xxxxxxxx",
+    .sector_size    = 1024,
+    // Assume memory is regions are same size (smallest). Flash algo should ignore requests
+    //  when variable sized sectors exist
+    // .sector_cnt = ((.flash_end - .flash_start) / .sector_size);
+    .sector_cnt     = (kB(256)/1024),
+    .flash_start    = 0,
+    .flash_end      = kB(256),
+    .ram_start      = 0x20000000,
+    .ram_end        = 0x20004000,
+    .disc_size      = MB(8)
+};
