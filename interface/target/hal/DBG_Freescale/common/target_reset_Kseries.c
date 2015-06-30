@@ -36,15 +36,39 @@ void prerun_target_config(void)
     // SIM peripheral   0x40047000
     // address offset   0x    1054
     uint32_t UUID_LOC = 0x40048054;
+    uint16_t MAC[3]; // 3 16 bits words for the MAC
     uint32_t uuid[4] = {0};
+    uint32_t UUID_LOC_BASE = (uint32_t)&uuid[0];
+    int i = 0, j = 0;
+    // three random seeds to make a MAC
+    MAC[0] = 0x2055;  
+    MAC[1] = 0x5c44;
+    MAC[2] = 0x79fe;
     // get a hold of the target
     target_set_state(RESET_PROGRAM);
     // do mass-erase if necessary
     target_unlock_sequence();
     // get target UUID
     swd_read_memory(UUID_LOC, (uint8_t *)&uuid, 16);
+
+    // XOR in each halfword of the UUID into each seed 
+    for (i=0;i<3;i++) {
+        for (j=0;j<8;j++) {
+            MAC[i] ^= (*(uint32_t *)(UUID_LOC_BASE+(0x2*j)));
+        }
+    }
+
+    // we only want bottom 16 bits of word1 (MAC bits 32-47)
+    // and bit 9 forced to 1, bit 8 forced to 0
+    // Locally administered MAC, reduced conflicts
+    // http://en.wikipedia.org/wiki/MAC_address
+    // uint32_t word1 = (uint32_t )UUID_LOC_WORD1;
+    MAC[2] |= 0x0200;
+    MAC[2] &= 0xFEFF;
+    
+    
     // stringify and store the MAC generated from a UUID
-    build_mac_string(uuid);
+    build_mac_string((uint32_t *)MAC);
 }
 
 void board_init(void) {

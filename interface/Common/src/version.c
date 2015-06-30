@@ -62,14 +62,14 @@ void build_mac_string(uint32_t *uuid_data)
     uint32_t i = 0;
     uint8_t b = 0;
     // patch for MAC use. Make sure MSB bits are set correctly
-    uuid_data[2] |=  (0x2 << 8);
-    uuid_data[2] &= ~(0x1 << 8);
+    //uuid_data[2] |=  (0x2 << 8);
+    //uuid_data[2] &= ~(0x1 << 8);
     for (; i<2; i++) {
-        b = uuid_data[2] >> (8-(i*8));
+        b = uuid_data[1] >> (8-(i*8));
         get_byte_hex(b, (uint8_t *)&mac_string[i*2], (uint8_t *)&mac_string[i*2+1]);
     }
     for (; i<6; i++) {
-        b = uuid_data[3] >> (24-((i-2)*8));
+        b = uuid_data[0] >> (24-((i-2)*8));
         get_byte_hex(b, (uint8_t *)&mac_string[i*2], (uint8_t *)&mac_string[i*2+1]);
     }
     mac_string[15] = '\0';
