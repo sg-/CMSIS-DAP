@@ -591,6 +591,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1462,6 +1467,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2507,6 +2517,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3378,6 +3393,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4251,6 +4271,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5122,6 +5147,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5995,6 +6025,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -6866,6 +6901,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -7739,6 +7779,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -8610,6 +8655,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -9483,6 +9533,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -10355,6 +10410,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -11226,6 +11286,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -12271,6 +12336,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -13142,6 +13212,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -14015,6 +14090,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -14886,6 +14966,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -15844,6 +15929,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -16932,6 +17022,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -17803,6 +17898,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -18676,6 +18776,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -19547,6 +19652,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -20505,6 +20615,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -21593,6 +21708,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -22464,6 +22584,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -23373,6 +23498,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -24454,6 +24584,11 @@
               <FileName>intelhex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Common\src\intelhex.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Common\src\crc.c</FilePath>
             </File>
           </Files>
         </Group>
