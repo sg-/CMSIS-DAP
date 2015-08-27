@@ -50,6 +50,11 @@ void gpio_set_dap_led(uint8_t state) {
 
 void gpio_set_cdc_led(uint8_t state) {
 // Only 1 LED on hardware which is used for DAP/MSD
+  if (state) {
+    PIOA->PIO_CODR = (1 << _BIT_LED_GREEN); // Green LED == on
+  } else {
+    PIOA->PIO_SODR = (1 << _BIT_LED_GREEN); // Green LED == off
+  }
 }
 
 void gpio_set_msd_led(uint8_t state) {
